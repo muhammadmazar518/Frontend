@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+html,
+body,
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #fff9f9;
+}
+
+.container {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
+  width: 768px;
+  max-width: 100%;
+  min-height: 480px;
+}
+
+
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease;
+}
+
+.sign-in {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+
+.sign-up {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+}
+
+form {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  height: 100%;
+  gap: 10px;
+}
+
+form h1 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+form span {
+  font-size: 11px;
+  color: #999;
+  letter-spacing: 0.3px;
+}
+
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin: 6px 0;
+}
+
+.social-icons .icon {
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 18px;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.social-icons .icon:hover {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+  margin: 4px 0;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 12px 40px 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #f9f9f9;
+  outline: none;
+  transition: border 0.3s;
+  color: #333;
+}
+
+.input-box input:focus {
+  border-color: #000;
+  background: #fff;
+}
+
+.input-box label {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #aaa;
+  pointer-events: none;
+  transition: all 0.3s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  top: -8px;
+  left: 10px;
+  font-size: 10px;
+  background: #fff;
+  padding: 0 4px;
+  color: #000;
+  font-weight: 600;
+}
+
+.input-box i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #bbb;
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animation {
+  animation: slideUp 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+  opacity: 0;
+}
+
+button {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 11px 36px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.3s, transform 0.2s;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background: #333;
+  transform: translateY(-1px);
+}
+
+button.hidden {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+button.hidden:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+form a {
+  font-size: 12px;
+  color: #777;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+form a:hover { color: #000; }
+
+.signup-link {
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+}
+
+.signup-link a {
+  color: #000;
+  font-weight: 700;
+}
+
+.toggle-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: all 0.6s ease-in-out;
+  border-radius: 0 16px 16px 0;
+  z-index: 1000;
+}
+
+.toggle {
+  background: #000;
+  height: 100%;
+  color: #fff;
+  position: relative;
+  left: -100%;
+  width: 200%;
+  transition: all 0.6s ease-in-out;
+}
+
+.toggle-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 30px;
+  text-align: center;
+  gap: 16px;
+  transition: all 0.6s ease-in-out;
+}
+
+.toggle-panel h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.toggle-panel p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+}
+
+.toggle-left {
+  left: 0;
+  transform: translateX(-200%);
+}
+
+.toggle-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+.container.active .sign-in {
+  transform: translateX(100%);
+}
+
+.container.active .sign-up {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: slideUp 0.6s ease forwards;
+}
+
+.container.active .toggle-container {
+  transform: translateX(-100%);
+  border-radius: 16px 0 0 16px;
+}
+
+.container.active .toggle {
+  transform: translateX(50%);
+}
+
+.container.active .toggle-left {
+  transform: translateX(0);
+}
+
+.container.active .toggle-right {
+  transform: translateX(200%);
+}
+
+@media (max-width: 600px) {
+  .container { width: 95vw; min-height: 560px; }
+  form { padding: 28px 20px; }
+  .toggle-panel h1 { font-size: 22px; }
+}
