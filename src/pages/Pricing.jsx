@@ -161,7 +161,7 @@ const Pricing = () => {
     setLoadingPlan(plan.name);
 
     try {
-      const response = await fetch("http://localhost:5000/api/payment/create-checkout-session", {
+      const response = await fetch("${import.meta.env.VITE_API_URL}/payment/create-checkout-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
