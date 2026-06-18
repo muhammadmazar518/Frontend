@@ -29,8 +29,15 @@ const Sidebar = () => {
       .catch((err) => {
         console.error("Profile load karne mein error aaya:", err);
       });
+
     const saved = localStorage.getItem("profile_photo");
     if (saved) setPhoto(saved);
+
+    const handleStorage = () => {
+      const updated = localStorage.getItem("profile_photo");
+      if (updated) setPhoto(updated);
+    };
+
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
