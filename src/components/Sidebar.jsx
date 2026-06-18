@@ -37,9 +37,8 @@ const Sidebar = () => {
       const updated = localStorage.getItem("profile_photo");
       if (updated) setPhoto(updated);
     };
-
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
+    window.addEventListener("profile_photo_updated", handleStorage);
+    return () => window.removeEventListener("profile_photo_updated", handleStorage);
   }, []);
 
   const handleLogout = () => {
