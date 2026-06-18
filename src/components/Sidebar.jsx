@@ -55,10 +55,13 @@ const Sidebar = () => {
         </div>
         <span style={styles.logoText}>SaasPanel</span>
       </div>
-
       <div style={styles.userCard}>
         <div style={styles.userAvatar}>
-          {user?.name ? user.name.charAt(0).toUpperCase() : "M"}
+          {photo ? (
+            <img src={photo} alt="avatar" style={{ width: "36px", height: "36px", borderRadius: "50%", objectFit: "cover" }} />
+          ) : (
+            user?.name ? user.name.charAt(0).toUpperCase() : "U"
+          )}
         </div>
         <div style={styles.userInfo}>
           <p style={styles.userName}>{user?.name || "User"}</p>
