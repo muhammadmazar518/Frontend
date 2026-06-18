@@ -14,6 +14,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [hasPurchased, setHasPurchased] = useState(false);
+  const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
     getProfile()
@@ -28,6 +29,10 @@ const Sidebar = () => {
       .catch((err) => {
         console.error("Profile load karne mein error aaya:", err);
       });
+    const saved = localStorage.getItem("profile_photo");
+    if (saved) setPhoto(saved);
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   const handleLogout = () => {

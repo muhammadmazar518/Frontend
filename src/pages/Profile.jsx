@@ -39,6 +39,7 @@ const Profile = () => {
     reader.onload = (ev) => {
       setPhoto(ev.target.result);
       localStorage.setItem("profile_photo", ev.target.result);
+      window.dispatchEvent(new Event("storage"));
     };
     reader.readAsDataURL(file);
   };
