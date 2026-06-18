@@ -12,6 +12,9 @@ import Pricing from "./pages/Pricing";
 import GoogleCallback from "./pages/GoogleCallback";
 import Contact from "../src/components/Contact";
 import PaymentSuccess from "../src/pages/PaymentSuccess";
+import Services from "../src/pages/Services";
+import Projects from "../src/pages/Projects";
+
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -52,15 +55,15 @@ const App = () => {
             }
           />
 
-            <Route
+          <Route
             path="/contact"
             element={
               <PublicRoute>
                 <Contact />
               </PublicRoute>
             }
-          /> 
-           
+          />
+
 
           <Route
             path="/login"
@@ -77,6 +80,27 @@ const App = () => {
               <PublicRoute>
                 <Signup />
               </PublicRoute>
+            }
+          />
+          <Route
+            path="/services"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Services />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/projects"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Projects />
+                </Layout>
+              </PrivateRoute>
             }
           />
 
