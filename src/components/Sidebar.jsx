@@ -8,6 +8,8 @@ const navItems = [
   { path: "/weather", label: "Weather", icon: "🌤" },
   { path: "/courses", label: "Courses", icon: "📚", pro: true },
   { path: "/pricing", label: "Pricing", icon: "💳" },
+  { path: "/services", label: "Services", icon: "🛠️" },
+  { path: "/projects", label: "Projects", icon: "📁" },
 ];
 
 const Sidebar = () => {
