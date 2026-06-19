@@ -18,7 +18,11 @@ const Sidebar = () => {
   const [hasPurchased, setHasPurchased] = useState(false);
   const [photo, setPhoto] = useState(null);
 
-  useEffect(() => {
+useEffect(() => {
+    // token change hone pe profile reload karo
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
     getProfile()
       .then((res) => {
         setUser(res.data);
@@ -32,16 +36,17 @@ const Sidebar = () => {
         console.error("Profile load karne mein error aaya:", err);
       });
 
+    // ✅ photo bhi reset karo naye user ke liye
     const saved = localStorage.getItem("profile_photo");
-    if (saved) setPhoto(saved);
+    setPhoto(saved || null);
 
     const handleStorage = () => {
       const updated = localStorage.getItem("profile_photo");
-      if (updated) setPhoto(updated);
+      setPhoto(updated || null);
     };
     window.addEventListener("profile_photo_updated", handleStorage);
     return () => window.removeEventListener("profile_photo_updated", handleStorage);
-  }, []);
+  }, [localStorage.getItem("token")]); // ✅ token change pe re-run karo
 
   const handleLogout = () => {
     localStorage.removeItem("token");
