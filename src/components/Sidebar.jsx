@@ -18,7 +18,7 @@ const Sidebar = () => {
   const [hasPurchased, setHasPurchased] = useState(false);
   const [photo, setPhoto] = useState(null);
 
-useEffect(() => {
+  useEffect(() => {
     // token change hone pe profile reload karo
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -50,6 +50,7 @@ useEffect(() => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("profile_photo"); // ✅ yeh add karo
     navigate("/");
   };
 

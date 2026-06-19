@@ -10,6 +10,10 @@ const GoogleCallback = () => {
     const error = searchParams.get("error");
 
     if (token) {
+      // ✅ pehle sab clear karo
+      localStorage.removeItem("token");
+      localStorage.removeItem("profile_photo");
+      // phir naya save karo
       localStorage.setItem("token", token);
       navigate("/dashboard", { replace: true });
       return;
@@ -21,7 +25,6 @@ const GoogleCallback = () => {
     }
 
     const savedToken = localStorage.getItem("token");
-
     if (savedToken) {
       navigate("/dashboard", { replace: true });
     } else {
