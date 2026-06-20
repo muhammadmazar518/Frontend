@@ -109,7 +109,6 @@ const Profile = () => {
           <div style={styles.userInfo}>
             <h2 style={styles.userName}>{form.name || "User"}</h2>
             <p style={styles.userEmail}>{form.email}</p>
-            <span style={styles.freeBadge}>FREE</span>
           </div>
         </div>
 
