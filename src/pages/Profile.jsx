@@ -23,8 +23,18 @@ const Profile = () => {
       .catch(() => setError("Failed to load profile."))
       .finally(() => setLoading(false));
 
-    const saved = localStorage.getItem("profile_photo");
-    if (saved) setPhoto(saved);
+    // ✅ photo sirf tab load karo jab same user ho
+    const token = localStorage.getItem("token");
+    const savedPhoto = localStorage.getItem("profile_photo");
+    const savedToken = localStorage.getItem("photo_token");
+
+    if (savedPhoto && savedToken === token) {
+      setPhoto(savedPhoto);
+    } else {
+      // naya user hai — photo clear karo
+      setPhoto(null);
+      localStorage.removeItem("profile_photo");
+    }
   }, []);
 
   const handleChange = (e) => {
@@ -39,6 +49,8 @@ const Profile = () => {
     reader.onload = (ev) => {
       setPhoto(ev.target.result);
       localStorage.setItem("profile_photo", ev.target.result);
+      // ✅ is photo ka token save karo
+      localStorage.setItem("photo_token", localStorage.getItem("token"));
       window.dispatchEvent(new CustomEvent("profile_photo_updated"));
     };
     reader.readAsDataURL(file);
