@@ -13,7 +13,7 @@ const Services = () => {
   const headers = { Authorization: `Bearer ${token}` };
 
   const fetchServices = async () => {
-    const res = await axios.get(`${API}/api/services`, { headers });
+    const res = await axios.get(`${API}/services`, { headers });
     setServices(res.data);
   };
 
@@ -23,10 +23,10 @@ const Services = () => {
     if (!form.title) return;
     setLoading(true);
     if (editId) {
-      await axios.put(`${API}/api/services/${editId}`, form, { headers });
+      await axios.put(`${API}/services/${editId}`, form, { headers });
       setEditId(null);
     } else {
-      await axios.post(`${API}/api/services`, form, { headers });
+      await axios.post(`${API}/services`, form, { headers });
     }
     setForm({ title: "", description: "", price: "", icon: "🌐" });
     fetchServices();
@@ -40,7 +40,7 @@ const Services = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this service?")) return;
-    await axios.delete(`${API}/api/services/${id}`, { headers });
+    await axios.delete(`${API}/services/${id}`, { headers });
     fetchServices();
   };
 

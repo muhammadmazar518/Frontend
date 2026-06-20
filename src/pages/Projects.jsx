@@ -19,7 +19,7 @@ const Projects = () => {
   const headers = { Authorization: `Bearer ${token}` };
 
   const fetchProjects = async () => {
-    const res = await axios.get(`${API}/api/projects`, { headers });
+    const res = await axios.get(`${API}/projects`, { headers });
     setProjects(res.data);
   };
 
@@ -29,10 +29,10 @@ const Projects = () => {
     if (!form.title) return;
     setLoading(true);
     if (editId) {
-      await axios.put(`${API}/api/projects/${editId}`, form, { headers });
+      await axios.put(`${API}/projects/${editId}`, form, { headers });
       setEditId(null);
     } else {
-      await axios.post(`${API}/api/projects`, form, { headers });
+      await axios.post(`${API}/projects`, form, { headers });
     }
     setForm({ title: "", description: "", status: "Planning", icon: "📁" });
     fetchProjects();
@@ -46,7 +46,7 @@ const Projects = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this project?")) return;
-    await axios.delete(`${API}/api/projects/${id}`, { headers });
+    await axios.delete(`${API}/projects/${id}`, { headers });
     fetchProjects();
   };
 
