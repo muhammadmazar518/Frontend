@@ -61,16 +61,16 @@ const PaymentSuccess = () => {
   );
 };
 
-const styles = {
-  page: { minHeight: "100vh", background: "#0d0f14", display: "flex", alignItems: "center", justifyContent: "center" },
-  box: { background: "#161824", border: "1px solid #1e2130", borderRadius: "20px", padding: "48px 40px", textAlign: "center", maxWidth: "420px", width: "90%" },
-  spinner: { width: "44px", height: "44px", border: "3px solid #1e2130", borderTop: "3px solid #7c3aed", borderRadius: "50%", margin: "0 auto 20px", animation: "spin 0.8s linear infinite" },
-  text: { color: "#9ca3af", fontSize: "14px" },
-  icon: { fontSize: "56px", marginBottom: "16px" },
-  title: { color: "#fff", fontSize: "24px", fontWeight: "800", margin: "0 0 10px" },
-  sub: { color: "#6b7280", fontSize: "14px", margin: "0 0 16px", lineHeight: "1.6" },
-  redirect: { color: "#4b5563", fontSize: "12px", marginBottom: "16px" },
-  btn: { background: "#7c3aed", color: "#fff", border: "none", borderRadius: "10px", padding: "12px 28px", fontSize: "14px", fontWeight: "700", cursor: "pointer" },
-};
+// const styles = {
+//   page: { minHeight: "100vh", background: "#0d0f14", display: "flex", alignItems: "center", justifyContent: "center" },
+//   box: { background: "#161824", border: "1px solid #1e2130", borderRadius: "20px", padding: "48px 40px", textAlign: "center", maxWidth: "420px", width: "90%" },
+//   spinner: { width: "44px", height: "44px", border: "3px solid #1e2130", borderTop: "3px solid #7c3aed", borderRadius: "50%", margin: "0 auto 20px", animation: "spin 0.8s linear infinite" },
+//   text: { color: "#9ca3af", fontSize: "14px" },
+//   icon: { fontSize: "56px", marginBottom: "16px" },
+//   title: { color: "#fff", fontSize: "24px", fontWeight: "800", margin: "0 0 10px" },
+//   sub: { color: "#6b7280", fontSize: "14px", margin: "0 0 16px", lineHeight: "1.6" },
+//   redirect: { color: "#4b5563", fontSize: "12px", marginBottom: "16px" },
+//   btn: { background: "#7c3aed", color: "#fff", border: "none", borderRadius: "10px", padding: "12px 28px", fontSize: "14px", fontWeight: "700", cursor: "pointer" },
+// };
 
 export default PaymentSuccess;

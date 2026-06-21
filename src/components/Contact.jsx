@@ -181,360 +181,360 @@ const Contact = () => {
     );
 };
 
-const styles = {
+// const styles = {
 
 
-    page: {
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #0057ff 0%, #0d7dff 50%, #35a8ff 100%)",
-        fontFamily: "'Segoe UI', sans-serif"
-    },
+//     page: {
+//         minHeight: "100vh",
+//         background: "linear-gradient(135deg, #0057ff 0%, #0d7dff 50%, #35a8ff 100%)",
+//         fontFamily: "'Segoe UI', sans-serif"
+//     },
 
-    nav: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "16px 60px",
-        borderBottom: "1px solid #1e2130",
-        position: "sticky",
-        top: 0,
-        background: "rgba(8,9,18,0.9)",
-        backdropFilter: "blur(10px)",
-        zIndex: 100
-    },
+//     nav: {
+//         display: "flex",
+//         alignItems: "center",
+//         justifyContent: "space-between",
+//         padding: "16px 60px",
+//         borderBottom: "1px solid #1e2130",
+//         position: "sticky",
+//         top: 0,
+//         background: "rgba(8,9,18,0.9)",
+//         backdropFilter: "blur(10px)",
+//         zIndex: 100
+//     },
 
-    navLogo: {
-        display: "flex",
-        alignItems: "center",
-        gap: "10px"
-    },
+//     navLogo: {
+//         display: "flex",
+//         alignItems: "center",
+//         gap: "10px"
+//     },
 
-    navLogoIcon: {
-        width: "36px",
-        height: "36px",
-        background: "#7c3aed",
-        borderRadius: "10px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#fff",
-        fontWeight: "800",
-        fontSize: "16px"
-    },
+//     navLogoIcon: {
+//         width: "36px",
+//         height: "36px",
+//         background: "#7c3aed",
+//         borderRadius: "10px",
+//         display: "flex",
+//         alignItems: "center",
+//         justifyContent: "center",
+//         color: "#fff",
+//         fontWeight: "800",
+//         fontSize: "16px"
+//     },
 
-    navLogoText: {
-        color: "#fff",
-        fontWeight: "800",
-        fontSize: "17px"
-    },
+//     navLogoText: {
+//         color: "#fff",
+//         fontWeight: "800",
+//         fontSize: "17px"
+//     },
 
-    navLinks: {
-        display: "flex",
-        gap: "32px"
-    },
+//     navLinks: {
+//         display: "flex",
+//         gap: "32px"
+//     },
 
-    navLink: {
-        background: "none",
-        border: "none",
-        color: "#9ca3af",
-        fontSize: "15px",
-        fontWeight: "500",
-        cursor: "pointer"
-    },
+//     navLink: {
+//         background: "none",
+//         border: "none",
+//         color: "#9ca3af",
+//         fontSize: "15px",
+//         fontWeight: "500",
+//         cursor: "pointer"
+//     },
 
-    hero: {
-        position: "relative",
-        textAlign: "center",
-        padding: "80px 60px 60px",
-        overflow: "hidden"
-    },
+//     hero: {
+//         position: "relative",
+//         textAlign: "center",
+//         padding: "80px 60px 60px",
+//         overflow: "hidden"
+//     },
 
-    glow: {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "600px",
-        height: "300px",
-        background: "radial-gradient(ellipse, rgba(124,58,237,0.25) 0%, transparent 70%)",
-        pointerEvents: "none"
-    },
+//     glow: {
+//         position: "absolute",
+//         top: "50%",
+//         left: "50%",
+//         transform: "translate(-50%, -50%)",
+//         width: "600px",
+//         height: "300px",
+//         background: "radial-gradient(ellipse, rgba(124,58,237,0.25) 0%, transparent 70%)",
+//         pointerEvents: "none"
+//     },
 
-    badge: {
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "8px",
-        background: "#1e2130",
-        border: "1px solid #2d3348",
-        color: "#d1d5db",
-        fontSize: "14px",
-        fontWeight: "500",
-        padding: "8px 18px",
-        borderRadius: "30px",
-        marginBottom: "28px"
-    },
+//     badge: {
+//         display: "inline-flex",
+//         alignItems: "center",
+//         gap: "8px",
+//         background: "#1e2130",
+//         border: "1px solid #2d3348",
+//         color: "#d1d5db",
+//         fontSize: "14px",
+//         fontWeight: "500",
+//         padding: "8px 18px",
+//         borderRadius: "30px",
+//         marginBottom: "28px"
+//     },
 
-    heroTitle: {
-        fontSize: "80px",
-        fontWeight: "900",
-        color: "#fff",
-        margin: "0 0 20px",
-        letterSpacing: "-2px",
-        lineHeight: 1.1
-    },
+//     heroTitle: {
+//         fontSize: "80px",
+//         fontWeight: "900",
+//         color: "#fff",
+//         margin: "0 0 20px",
+//         letterSpacing: "-2px",
+//         lineHeight: 1.1
+//     },
 
-    heroAccent: {
-        color: "#000"
-    },
+//     heroAccent: {
+//         color: "#000"
+//     },
 
-    heroSub: {
-        color: "#000",
-        fontSize: "16px",
-        lineHeight: "1.7",
-        maxWidth: "480px",
-        margin: "0 auto"
-    },
+//     heroSub: {
+//         color: "#000",
+//         fontSize: "16px",
+//         lineHeight: "1.7",
+//         maxWidth: "480px",
+//         margin: "0 auto"
+//     },
 
-    main: {
-        display: "grid",
-        gridTemplateColumns: "1fr 1.4fr",
-        gap: "48px",
-        padding: "60px",
-        maxWidth: "1200px",
-        margin: "0 auto"
-    },
+//     main: {
+//         display: "grid",
+//         gridTemplateColumns: "1fr 1.4fr",
+//         gap: "48px",
+//         padding: "60px",
+//         maxWidth: "1200px",
+//         margin: "0 auto"
+//     },
 
-    left: {},
+//     left: {},
 
-    leftTitle: {
-        color: "#fff",
-        fontSize: "28px",
-        fontWeight: "800",
-        margin: "0 0 12px",
-        letterSpacing: "-0.5px"
-    },
+//     leftTitle: {
+//         color: "#fff",
+//         fontSize: "28px",
+//         fontWeight: "800",
+//         margin: "0 0 12px",
+//         letterSpacing: "-0.5px"
+//     },
 
-    leftSub: {
-        color: "#000",
-        fontSize: "14px",
-        lineHeight: "1.7",
-        margin: "0 0 28px",
-        maxWidth: "360px"
-    },
+//     leftSub: {
+//         color: "#000",
+//         fontSize: "14px",
+//         lineHeight: "1.7",
+//         margin: "0 0 28px",
+//         maxWidth: "360px"
+//     },
 
-    infoList: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "14px"
-    },
+//     infoList: {
+//         display: "flex",
+//         flexDirection: "column",
+//         gap: "14px"
+//     },
 
-    infoCard: {
-        display: "flex",
-        alignItems: "flex-start",
-        gap: "16px",
-        background: "#161824",
-        border: "1px solid #1e2130",
-        borderRadius: "14px",
-        padding: "18px 20px"
-    },
+//     infoCard: {
+//         display: "flex",
+//         alignItems: "flex-start",
+//         gap: "16px",
+//         background: "#161824",
+//         border: "1px solid #1e2130",
+//         borderRadius: "14px",
+//         padding: "18px 20px"
+//     },
 
-    infoIconWrap: {
-        width: "42px",
-        height: "42px",
-        background: "#1e2130",
-        borderRadius: "10px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0
-    },
+//     infoIconWrap: {
+//         width: "42px",
+//         height: "42px",
+//         background: "#1e2130",
+//         borderRadius: "10px",
+//         display: "flex",
+//         alignItems: "center",
+//         justifyContent: "center",
+//         flexShrink: 0
+//     },
 
-    infoLabel: {
-        color: "#4b5563",
-        fontSize: "10px",
-        fontWeight: "700",
-        letterSpacing: "1.5px",
-        margin: "0 0 4px"
-    },
+//     infoLabel: {
+//         color: "#4b5563",
+//         fontSize: "10px",
+//         fontWeight: "700",
+//         letterSpacing: "1.5px",
+//         margin: "0 0 4px"
+//     },
 
-    infoTitle: {
-        color: "#fff",
-        fontSize: "15px",
-        fontWeight: "700",
-        margin: "0 0 2px"
-    },
+//     infoTitle: {
+//         color: "#fff",
+//         fontSize: "15px",
+//         fontWeight: "700",
+//         margin: "0 0 2px"
+//     },
 
-    infoSub: {
-        color: "#6b7280",
-        fontSize: "12px",
-        margin: 0
-    },
+//     infoSub: {
+//         color: "#6b7280",
+//         fontSize: "12px",
+//         margin: 0
+//     },
 
-    right: {
-        background: "#161824",
-        border: "1px solid #1e2130",
-        borderRadius: "20px",
-        padding: "36px"
-    },
+//     right: {
+//         background: "#161824",
+//         border: "1px solid #1e2130",
+//         borderRadius: "20px",
+//         padding: "36px"
+//     },
 
-    formTitle: {
-        color: "#fff",
-        fontSize: "26px",
-        fontWeight: "800",
-        margin: "0 0 6px",
-        letterSpacing: "-0.5px"
-    },
+//     formTitle: {
+//         color: "#fff",
+//         fontSize: "26px",
+//         fontWeight: "800",
+//         margin: "0 0 6px",
+//         letterSpacing: "-0.5px"
+//     },
 
-    formSub: {
-        color: "#6b7280",
-        fontSize: "14px",
-        margin: "0 0 24px"
-    },
+//     formSub: {
+//         color: "#6b7280",
+//         fontSize: "14px",
+//         margin: "0 0 24px"
+//     },
 
-    errorBox: {
-        background: "#1f0a0a",
-        border: "1px solid #7f1d1d",
-        color: "#fca5a5",
-        padding: "12px 16px",
-        borderRadius: "10px",
-        fontSize: "13px",
-        marginBottom: "18px"
-    },
+//     errorBox: {
+//         background: "#1f0a0a",
+//         border: "1px solid #7f1d1d",
+//         color: "#fca5a5",
+//         padding: "12px 16px",
+//         borderRadius: "10px",
+//         fontSize: "13px",
+//         marginBottom: "18px"
+//     },
 
-    successBox: {
-        background: "#052e16",
-        border: "1px solid #166534",
-        color: "#86efac",
-        padding: "12px 16px",
-        borderRadius: "10px",
-        fontSize: "13px",
-        marginBottom: "18px"
-    },
+//     successBox: {
+//         background: "#052e16",
+//         border: "1px solid #166534",
+//         color: "#86efac",
+//         padding: "12px 16px",
+//         borderRadius: "10px",
+//         fontSize: "13px",
+//         marginBottom: "18px"
+//     },
 
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "18px"
-    },
+//     form: {
+//         display: "flex",
+//         flexDirection: "column",
+//         gap: "18px"
+//     },
 
-    formRow: {
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "16px"
-    },
+//     formRow: {
+//         display: "grid",
+//         gridTemplateColumns: "1fr 1fr",
+//         gap: "16px"
+//     },
 
-    field: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px"
-    },
+//     field: {
+//         display: "flex",
+//         flexDirection: "column",
+//         gap: "8px"
+//     },
 
-    label: {
-        color: "#4b5563",
-        fontSize: "11px",
-        fontWeight: "700",
-        letterSpacing: "1.2px"
-    },
+//     label: {
+//         color: "#4b5563",
+//         fontSize: "11px",
+//         fontWeight: "700",
+//         letterSpacing: "1.2px"
+//     },
 
-    input: {
-        background: "#0d0f14",
-        border: "1px solid #1e2130",
-        borderRadius: "10px",
-        padding: "12px 16px",
-        color: "#fff",
-        fontSize: "14px",
-        outline: "none"
-    },
+//     input: {
+//         background: "#0d0f14",
+//         border: "1px solid #1e2130",
+//         borderRadius: "10px",
+//         padding: "12px 16px",
+//         color: "#fff",
+//         fontSize: "14px",
+//         outline: "none"
+//     },
 
-    textarea: {
-        background: "#0d0f14",
-        border: "1px solid #1e2130",
-        borderRadius: "10px",
-        padding: "12px 16px",
-        color: "#fff",
-        fontSize: "14px",
-        outline: "none",
-        resize: "vertical",
-        fontFamily: "inherit"
-    },
+//     textarea: {
+//         background: "#0d0f14",
+//         border: "1px solid #1e2130",
+//         borderRadius: "10px",
+//         padding: "12px 16px",
+//         color: "#fff",
+//         fontSize: "14px",
+//         outline: "none",
+//         resize: "vertical",
+//         fontFamily: "inherit"
+//     },
 
-    submitBtn: {
-        background: "#7c3aed",
-        color: "#fff",
-        border: "none",
-        borderRadius: "10px",
-        padding: "14px",
-        fontSize: "15px",
-        fontWeight: "700",
-        cursor: "pointer"
-    },
+//     submitBtn: {
+//         background: "#7c3aed",
+//         color: "#fff",
+//         border: "none",
+//         borderRadius: "10px",
+//         padding: "14px",
+//         fontSize: "15px",
+//         fontWeight: "700",
+//         cursor: "pointer"
+//     },
 
-    privacyText: {
-        textAlign: "center",
-        color: "#6b7280",
-        fontSize: "14px",
-        marginTop: "5px",
-    },
+//     privacyText: {
+//         textAlign: "center",
+//         color: "#6b7280",
+//         fontSize: "14px",
+//         marginTop: "5px",
+//     },
 
-    privacyLink: {
-        color: "#818cf8",
-        cursor: "pointer",
-    },
+//     privacyLink: {
+//         color: "#818cf8",
+//         cursor: "pointer",
+//     },
 
 
-    footer: {
-        borderTop: "1px solid rgba(255,255,255,0.08)",
-        marginTop: "80px",
-        padding: "28px 60px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        background: "#050816",
-    },
+//     footer: {
+//         borderTop: "1px solid rgba(255,255,255,0.08)",
+//         marginTop: "80px",
+//         padding: "28px 60px",
+//         display: "flex",
+//         justifyContent: "space-between",
+//         alignItems: "center",
+//         background: "#050816",
+//     },
 
-    footerLogo: {
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-    },
+//     footerLogo: {
+//         display: "flex",
+//         alignItems: "center",
+//         gap: "12px",
+//     },
 
-    footerIcon: {
-        width: "36px",
-        height: "36px",
-        borderRadius: "12px",
-        background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        color: "#fff",
-        fontWeight: "700",
-    },
+//     footerIcon: {
+//         width: "36px",
+//         height: "36px",
+//         borderRadius: "12px",
+//         background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+//         display: "flex",
+//         justifyContent: "center",
+//         alignItems: "center",
+//         color: "#fff",
+//         fontWeight: "700",
+//     },
 
-    footerText: {
-        color: "#fff",
-        fontSize: "16px",
-        fontWeight: "700",
-    },
+//     footerText: {
+//         color: "#fff",
+//         fontSize: "16px",
+//         fontWeight: "700",
+//     },
 
-    footerCopyright: {
-        color: "#6b7280",
-        fontSize: "14px",
-    },
+//     footerCopyright: {
+//         color: "#6b7280",
+//         fontSize: "14px",
+//     },
 
-    footerLinks: {
-        display: "flex",
-        gap: "28px",
-    },
+//     footerLinks: {
+//         display: "flex",
+//         gap: "28px",
+//     },
 
-    footerLink: {
-        background: "none",
-        border: "none",
-        color: "#6b7280",
-        cursor: "pointer",
-        fontSize: "14px",
-        transition: "0.3s",
-    },
+//     footerLink: {
+//         background: "none",
+//         border: "none",
+//         color: "#6b7280",
+//         cursor: "pointer",
+//         fontSize: "14px",
+//         transition: "0.3s",
+//     },
 
-};
+// };
 
 export default Contact;

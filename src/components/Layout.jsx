@@ -14,26 +14,26 @@ function Layout({ children }) {
   );
 }
 
-const styles = {
-  wrapper: {
-    display: "flex",
-    minHeight: "100vh",
-      background: "linear-gradient(135deg, #0057ff 0%, #0d7dff 50%, #35a8ff 100%)",
-  },
-  main: {
-    marginLeft: "220px",
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    minWidth: 0,
-    overflow: "hidden",
-  },
-  content: {
-    padding: "36px 32px",
-    flex: 1,
-    boxSizing: "border-box",
-    width: "100%",
-  },
-};
+// const styles = {
+//   wrapper: {
+//     display: "flex",
+//     minHeight: "100vh",
+//       background: "linear-gradient(135deg, #0057ff 0%, #0d7dff 50%, #35a8ff 100%)",
+//   },
+//   main: {
+//     marginLeft: "220px",
+//     flex: 1,
+//     display: "flex",
+//     flexDirection: "column",
+//     minWidth: 0,
+//     overflow: "hidden",
+//   },
+//   content: {
+//     padding: "36px 32px",
+//     flex: 1,
+//     boxSizing: "border-box",
+//     width: "100%",
+//   },
+// };
 
 export default Layout;

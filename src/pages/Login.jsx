@@ -113,145 +113,145 @@ const Login = () => {
   );
 };
 
-const styles = {
-  page: { 
-      minHeight: "100vh", 
-      background: "linear-gradient(135deg, #0057ff 0%, #0d7dff 50%, #35a8ff 100%)", 
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center", 
-      padding: "20px" 
-  },
+// const styles = {
+//   page: { 
+//       minHeight: "100vh", 
+//       background: "linear-gradient(135deg, #0057ff 0%, #0d7dff 50%, #35a8ff 100%)", 
+//       display: "flex", 
+//       alignItems: "center", 
+//       justifyContent: "center", 
+//       padding: "20px" 
+//   },
   
-  wrapper: { 
-      display: "flex", 
-      width: "35%", 
-      maxWidth: "760px", 
-      minHeight: "480px", 
-      borderRadius: "16px", 
-      overflow: "hidden", 
-      boxShadow: "0 20px 60px rgba(0,0,0,0.4)" 
-  },
+//   wrapper: { 
+//       display: "flex", 
+//       width: "35%", 
+//       maxWidth: "760px", 
+//       minHeight: "480px", 
+//       borderRadius: "16px", 
+//       overflow: "hidden", 
+//       boxShadow: "0 20px 60px rgba(0,0,0,0.4)" 
+//   },
   
-  formSide: { 
-      flex: 1, 
-      background: "#000", 
-      padding: "48px 40px", 
-      display: "flex", 
-      flexDirection: "column", 
-      justifyContent: "center" 
-  },
+//   formSide: { 
+//       flex: 1, 
+//       background: "#000", 
+//       padding: "48px 40px", 
+//       display: "flex", 
+//       flexDirection: "column", 
+//       justifyContent: "center" 
+//   },
   
-  heading: { 
-      color: "#f1f5f9", 
-      fontSize: "26px", 
-      fontWeight: "700", 
-      margin: "0 0 6px" 
-  },
+//   heading: { 
+//       color: "#f1f5f9", 
+//       fontSize: "26px", 
+//       fontWeight: "700", 
+//       margin: "0 0 6px" 
+//   },
   
-  sub: { 
-      color: "#64748b", 
-      fontSize: "14px", 
-      margin: "0 0 20px" 
-  },
+//   sub: { 
+//       color: "#64748b", 
+//       fontSize: "14px", 
+//       margin: "0 0 20px" 
+//   },
   
-  error: { 
-      background: "#450a0a", 
-      border: "1px solid #7f1d1d", 
-      color: "#fca5a5", 
-      padding: "10px 14px", 
-      borderRadius: "8px", 
-      fontSize: "13px", 
-      marginBottom: "16px" 
-  },
+//   error: { 
+//       background: "#450a0a", 
+//       border: "1px solid #7f1d1d", 
+//       color: "#fca5a5", 
+//       padding: "10px 14px", 
+//       borderRadius: "8px", 
+//       fontSize: "13px", 
+//       marginBottom: "16px" 
+//   },
 
-  googleBtn: { 
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center", 
-      gap: "10px", 
-      width: "100%", 
-      padding: "11px", 
-      background: "#fff", 
-      border: "none", 
-      borderRadius: "8px", 
-      fontSize: "14px", 
-      fontWeight: "600", 
-      color: "#374151", 
-      cursor: "pointer", 
-      marginBottom: "16px" 
-  },
+//   googleBtn: { 
+//       display: "flex", 
+//       alignItems: "center", 
+//       justifyContent: "center", 
+//       gap: "10px", 
+//       width: "100%", 
+//       padding: "11px", 
+//       background: "#fff", 
+//       border: "none", 
+//       borderRadius: "8px", 
+//       fontSize: "14px", 
+//       fontWeight: "600", 
+//       color: "#374151", 
+//       cursor: "pointer", 
+//       marginBottom: "16px" 
+//   },
 
-  dividerRow: { 
-      display: "flex", 
-      alignItems: "center", 
-      gap: "12px", 
-      marginBottom: "16px" 
-  },
+//   dividerRow: { 
+//       display: "flex", 
+//       alignItems: "center", 
+//       gap: "12px", 
+//       marginBottom: "16px" 
+//   },
   
-  dividerLine: { 
-      flex: 1, 
-      height: "1px", 
-      background: "#334155" 
-  },
+//   dividerLine: { 
+//       flex: 1, 
+//       height: "1px", 
+//       background: "#334155" 
+//   },
   
-  dividerText: { 
-      color: "#64748b", 
-      fontSize: "12px" 
-  },
+//   dividerText: { 
+//       color: "#64748b", 
+//       fontSize: "12px" 
+//   },
 
-  form: { 
-      display: "flex", 
-      flexDirection: "column", 
-      gap: "18px" 
-  },
+//   form: { 
+//       display: "flex", 
+//       flexDirection: "column", 
+//       gap: "18px" 
+//   },
   
-  field: { 
-      display: "flex", 
-      flexDirection: "column", 
-      gap: "6px" 
-  },
+//   field: { 
+//       display: "flex", 
+//       flexDirection: "column", 
+//       gap: "6px" 
+//   },
   
-  label: { 
-      color: "#94a3b8", 
-      fontSize: "13px", 
-      fontWeight: "500" 
-  },
+//   label: { 
+//       color: "#94a3b8", 
+//       fontSize: "13px", 
+//       fontWeight: "500" 
+//   },
   
-  input: { 
-      background: "#0f172a", 
-      border: "1px solid #334155", 
-      borderRadius: "8px", 
-      padding: "11px 14px", 
-      color: "#f1f5f9", 
-      fontSize: "14px", 
-      outline: "none" 
-  },
+//   input: { 
+//       background: "#0f172a", 
+//       border: "1px solid #334155", 
+//       borderRadius: "8px", 
+//       padding: "11px 14px", 
+//       color: "#f1f5f9", 
+//       fontSize: "14px", 
+//       outline: "none" 
+//   },
   
-  btn: { 
-      background: "#38bdf8", 
-      color: "#0f172a", 
-      border: "none", 
-      borderRadius: "8px", 
-      padding: "12px", 
-      fontSize: "15px", 
-      fontWeight: "700", 
-      cursor: "pointer", 
-      marginTop: "4px" 
-  },
+//   btn: { 
+//       background: "#38bdf8", 
+//       color: "#0f172a", 
+//       border: "none", 
+//       borderRadius: "8px", 
+//       padding: "12px", 
+//       fontSize: "15px", 
+//       fontWeight: "700", 
+//       cursor: "pointer", 
+//       marginTop: "4px" 
+//   },
   
-  signupText: { 
-      color: "#64748b", 
-      fontSize: "13px", 
-      textAlign: "center", 
-      marginTop: "20px" 
-  },
+//   signupText: { 
+//       color: "#64748b", 
+//       fontSize: "13px", 
+//       textAlign: "center", 
+//       marginTop: "20px" 
+//   },
   
-  link: { 
-      color: "#38bdf8", 
-      textDecoration: "none", 
-      fontWeight: "600" 
-  },
-};
+//   link: { 
+//       color: "#38bdf8", 
+//       textDecoration: "none", 
+//       fontWeight: "600" 
+//   },
+// };
 
 export default Login;

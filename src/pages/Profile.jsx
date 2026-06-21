@@ -189,258 +189,258 @@ const Profile = () => {
   );
 };
 
-const styles = {
-  heading: {
-    color: "#fff",
-    fontSize: "28px",
-    fontWeight: "800",
-    margin: "0 0 4px",
-    letterSpacing: "-0.5px"
-  },
+// const styles = {
+//   heading: {
+//     color: "#fff",
+//     fontSize: "28px",
+//     fontWeight: "800",
+//     margin: "0 0 4px",
+//     letterSpacing: "-0.5px"
+//   },
 
-  sub: {
-    color: "#000",
-    fontSize: "14px",
-    marginBottom: "24px"
-  },
+//   sub: {
+//     color: "#000",
+//     fontSize: "14px",
+//     marginBottom: "24px"
+//   },
 
-  card: {
-    background: "#161824",
-    border: "1px solid #1e2130",
-    borderRadius: "16px",
-    padding: "28px",
-    maxWidth: "700px"
-  },
+//   card: {
+//     background: "#161824",
+//     border: "1px solid #1e2130",
+//     borderRadius: "16px",
+//     padding: "28px",
+//     maxWidth: "700px"
+//   },
 
-  topSection: {
-    display: "flex",
-    alignItems: "center",
-    gap: "20px",
-    marginBottom: "24px"
-  },
+//   topSection: {
+//     display: "flex",
+//     alignItems: "center",
+//     gap: "20px",
+//     marginBottom: "24px"
+//   },
 
-  avatarWrap: {
-    position: "relative",
-    width: "90px",
-    height: "90px",
-    borderRadius: "50%",
-    cursor: "pointer",
-    flexShrink: 0
-  },
+//   avatarWrap: {
+//     position: "relative",
+//     width: "90px",
+//     height: "90px",
+//     borderRadius: "50%",
+//     cursor: "pointer",
+//     flexShrink: 0
+//   },
 
-  avatarImg: {
-    width: "90px",
-    height: "90px",
-    borderRadius: "50%",
-    objectFit: "cover"
-  },
+//   avatarImg: {
+//     width: "90px",
+//     height: "90px",
+//     borderRadius: "50%",
+//     objectFit: "cover"
+//   },
 
-  avatarFallback: {
-    width: "90px",
-    height: "90px",
-    borderRadius: "50%",
-    background: "#7c3aed",
-    color: "#fff",
-    fontSize: "36px",
-    fontWeight: "800",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  },
+//   avatarFallback: {
+//     width: "90px",
+//     height: "90px",
+//     borderRadius: "50%",
+//     background: "#7c3aed",
+//     color: "#fff",
+//     fontSize: "36px",
+//     fontWeight: "800",
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "center"
+//   },
 
-  cameraBtn: {
-    position: "absolute",
-    bottom: "2px",
-    right: "2px",
-    width: "26px",
-    height: "26px",
-    borderRadius: "50%",
-    background: "#1e2130",
-    border: "2px solid #0d0f14",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer"
-  },
+//   cameraBtn: {
+//     position: "absolute",
+//     bottom: "2px",
+//     right: "2px",
+//     width: "26px",
+//     height: "26px",
+//     borderRadius: "50%",
+//     background: "#1e2130",
+//     border: "2px solid #0d0f14",
+//     display: "flex",
+//     alignItems: "center",
+//     justifyContent: "center",
+//     cursor: "pointer"
+//   },
 
-  userInfo: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px"
-  },
+//   userInfo: {
+//     display: "flex",
+//     flexDirection: "column",
+//     gap: "4px"
+//   },
 
-  userName: {
-    color: "#fff",
-    fontSize: "22px",
-    fontWeight: "800",
-    margin: 0
-  },
+//   userName: {
+//     color: "#fff",
+//     fontSize: "22px",
+//     fontWeight: "800",
+//     margin: 0
+//   },
 
-  userEmail: {
-    color: "#6b7280",
-    fontSize: "14px",
-    margin: "0 0 8px"
-  },
+//   userEmail: {
+//     color: "#6b7280",
+//     fontSize: "14px",
+//     margin: "0 0 8px"
+//   },
 
-  freeBadge: {
-    display: "inline-block",
-    background: "#1e2130",
-    color: "#9ca3af",
-    fontSize: "11px",
-    fontWeight: "700",
-    padding: "4px 12px",
-    borderRadius: "20px",
-    border: "1px solid #374151",
-    width: "fit-content"
-  },
+//   freeBadge: {
+//     display: "inline-block",
+//     background: "#1e2130",
+//     color: "#9ca3af",
+//     fontSize: "11px",
+//     fontWeight: "700",
+//     padding: "4px 12px",
+//     borderRadius: "20px",
+//     border: "1px solid #374151",
+//     width: "fit-content"
+//   },
 
-  divider: {
-    height: "1px",
-    background: "#1e2130",
-    marginBottom: "24px"
-  },
+//   divider: {
+//     height: "1px",
+//     background: "#1e2130",
+//     marginBottom: "24px"
+//   },
 
-  infoGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
-    gap: "20px 32px",
-    marginBottom: "28px"
-  },
+//   infoGrid: {
+//     display: "grid",
+//     gridTemplateColumns: "1fr 1fr 1fr",
+//     gap: "20px 32px",
+//     marginBottom: "28px"
+//   },
 
-  infoItem: {},
+//   infoItem: {},
 
-  infoLabel: {
-    color: "#4b5563",
-    fontSize: "11px",
-    fontWeight: "700",
-    letterSpacing: "1px",
-    margin: "0 0 6px"
-  },
+//   infoLabel: {
+//     color: "#4b5563",
+//     fontSize: "11px",
+//     fontWeight: "700",
+//     letterSpacing: "1px",
+//     margin: "0 0 6px"
+//   },
 
-  infoValue: {
-    color: "#d1d5db",
-    fontSize: "15px",
-    fontWeight: "500",
-    margin: 0
-  },
+//   infoValue: {
+//     color: "#d1d5db",
+//     fontSize: "15px",
+//     fontWeight: "500",
+//     margin: 0
+//   },
 
-  editBtn: {
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    padding: "10px 20px",
-    background: "transparent",
-    border: "1px solid #374151",
-    borderRadius: "10px",
-    color: "#d1d5db",
-    fontSize: "14px",
-    fontWeight: "600",
-    cursor: "pointer"
-  },
+//   editBtn: {
+//     display: "flex",
+//     alignItems: "center",
+//     gap: "8px",
+//     padding: "10px 20px",
+//     background: "transparent",
+//     border: "1px solid #374151",
+//     borderRadius: "10px",
+//     color: "#d1d5db",
+//     fontSize: "14px",
+//     fontWeight: "600",
+//     cursor: "pointer"
+//   },
 
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px"
-  },
+//   form: {
+//     display: "flex",
+//     flexDirection: "column",
+//     gap: "16px"
+//   },
 
-  formGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "16px"
-  },
+//   formGrid: {
+//     display: "grid",
+//     gridTemplateColumns: "1fr 1fr",
+//     gap: "16px"
+//   },
 
-  field: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px"
-  },
+//   field: {
+//     display: "flex",
+//     flexDirection: "column",
+//     gap: "6px"
+//   },
 
-  fieldLabel: {
-    color: "#4b5563",
-    fontSize: "11px",
-    fontWeight: "700",
-    letterSpacing: "1px"
-  },
+//   fieldLabel: {
+//     color: "#4b5563",
+//     fontSize: "11px",
+//     fontWeight: "700",
+//     letterSpacing: "1px"
+//   },
 
-  input: {
-    background: "#0d0f14",
-    border: "1px solid #1e2130",
-    borderRadius: "8px",
-    padding: "10px 14px",
-    color: "#fff",
-    fontSize: "14px",
-    outline: "none"
-  },
+//   input: {
+//     background: "#0d0f14",
+//     border: "1px solid #1e2130",
+//     borderRadius: "8px",
+//     padding: "10px 14px",
+//     color: "#fff",
+//     fontSize: "14px",
+//     outline: "none"
+//   },
 
-  btnRow: {
-    display: "flex",
-    gap: "10px"
-  },
+//   btnRow: {
+//     display: "flex",
+//     gap: "10px"
+//   },
 
-  saveBtn: {
-    padding: "10px 24px",
-    background: "#7c3aed",
-    border: "none",
-    borderRadius: "8px",
-    color: "#fff",
-    fontSize: "14px",
-    fontWeight: "700",
-    cursor: "pointer"
-  },
+//   saveBtn: {
+//     padding: "10px 24px",
+//     background: "#7c3aed",
+//     border: "none",
+//     borderRadius: "8px",
+//     color: "#fff",
+//     fontSize: "14px",
+//     fontWeight: "700",
+//     cursor: "pointer"
+//   },
 
-  cancelBtn: {
-    padding: "10px 20px",
-    background: "transparent",
-    border: "1px solid #374151",
-    borderRadius: "8px",
-    color: "#9ca3af",
-    fontSize: "14px",
-    fontWeight: "600",
-    cursor: "pointer"
-  },
+//   cancelBtn: {
+//     padding: "10px 20px",
+//     background: "transparent",
+//     border: "1px solid #374151",
+//     borderRadius: "8px",
+//     color: "#9ca3af",
+//     fontSize: "14px",
+//     fontWeight: "600",
+//     cursor: "pointer"
+//   },
 
-  error: {
-    background: "#1f0a0a",
-    border: "1px solid #7f1d1d",
-    color: "#fca5a5",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontSize: "13px"
-  },
+//   error: {
+//     background: "#1f0a0a",
+//     border: "1px solid #7f1d1d",
+//     color: "#fca5a5",
+//     padding: "10px 14px",
+//     borderRadius: "8px",
+//     fontSize: "13px"
+//   },
 
-  successMsg: {
-    background: "#052e16",
-    border: "1px solid #166534",
-    color: "#86efac",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontSize: "13px"
-  },
+//   successMsg: {
+//     background: "#052e16",
+//     border: "1px solid #166534",
+//     color: "#86efac",
+//     padding: "10px 14px",
+//     borderRadius: "8px",
+//     fontSize: "13px"
+//   },
 
-  info: {
-    color: "#6b7280",
-    fontSize: "14px"
-  },
+//   info: {
+//     color: "#6b7280",
+//     fontSize: "14px"
+//   },
 
-  topRow: {
-    display: "flex",
-    justifyContent: "flex-end",
-    width: "100%",
-    marginBottom: "10px",
-    marginTop: "-10px"
-  },
+//   topRow: {
+//     display: "flex",
+//     justifyContent: "flex-end",
+//     width: "100%",
+//     marginBottom: "10px",
+//     marginTop: "-10px"
+//   },
 
-  dashboardBtn: {
-    background: "#000",
-    color: "#fff",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "600",
-    transition: "background 0.2s"
-  }
-};
+//   dashboardBtn: {
+//     background: "#000",
+//     color: "#fff",
+//     border: "none",
+//     padding: "10px 15px",
+//     borderRadius: "8px",
+//     cursor: "pointer",
+//     fontWeight: "600",
+//     transition: "background 0.2s"
+//   }
+// };
 
 export default Profile;
