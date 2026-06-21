@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import "./index.css";
+import "./App.css";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
