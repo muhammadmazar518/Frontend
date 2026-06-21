@@ -118,26 +118,26 @@ const Services = () => {
   );
 };
 
-// const styles = {
-//   page: { padding: "40px", background: "#0d0f14", minHeight: "100vh" },
-//   heading: { color: "#fff", fontSize: "28px", fontWeight: "800", margin: "0 0 4px" },
-//   sub: { color: "#6b7280", fontSize: "14px", marginBottom: "24px" },
-//   formCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "20px", marginBottom: "32px", display: "flex", flexDirection: "column", gap: "12px" },
-//   formTitle: { color: "#fff", fontSize: "15px", fontWeight: "700", margin: 0 },
-//   formRow: { display: "flex", gap: "12px", flexWrap: "wrap" },
-//   input: { background: "#0d0f14", border: "1px solid #1e2130", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none", flex: 1 },
-//   textarea: { background: "#0d0f14", border: "1px solid #1e2130", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none", resize: "vertical", minHeight: "80px" },
-//   addBtn: { background: "#7c3aed", border: "none", borderRadius: "8px", padding: "10px 24px", color: "#fff", fontSize: "14px", fontWeight: "700", cursor: "pointer" },
-//   cancelBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "10px 20px", color: "#9ca3af", fontSize: "14px", cursor: "pointer" },
-//   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "20px" },
-//   card: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "24px", display: "flex", flexDirection: "column", gap: "10px" },
-//   icon: { fontSize: "32px" },
-//   title: { color: "#fff", fontSize: "16px", fontWeight: "700", margin: 0 },
-//   desc: { color: "#6b7280", fontSize: "13px", margin: 0, flex: 1 },
-//   cardBottom: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" },
-//   price: { color: "#7c3aed", fontSize: "18px", fontWeight: "800" },
-//   editBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
-//   deleteBtn: { background: "transparent", border: "1px solid #7f1d1d", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
-// };
+const styles = {
+  page: { padding: "40px", background: "#0d0f14", minHeight: "100vh" },
+  heading: { color: "#fff", fontSize: "28px", fontWeight: "800", margin: "0 0 4px" },
+  sub: { color: "#6b7280", fontSize: "14px", marginBottom: "24px" },
+  formCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "20px", marginBottom: "32px", display: "flex", flexDirection: "column", gap: "12px" },
+  formTitle: { color: "#fff", fontSize: "15px", fontWeight: "700", margin: 0 },
+  formRow: { display: "flex", gap: "12px", flexWrap: "wrap" },
+  input: { background: "#0d0f14", border: "1px solid #1e2130", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none", flex: 1 },
+  textarea: { background: "#0d0f14", border: "1px solid #1e2130", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none", resize: "vertical", minHeight: "80px" },
+  addBtn: { background: "#7c3aed", border: "none", borderRadius: "8px", padding: "10px 24px", color: "#fff", fontSize: "14px", fontWeight: "700", cursor: "pointer" },
+  cancelBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "10px 20px", color: "#9ca3af", fontSize: "14px", cursor: "pointer" },
+  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "20px" },
+  card: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "24px", display: "flex", flexDirection: "column", gap: "10px" },
+  icon: { fontSize: "32px" },
+  title: { color: "#fff", fontSize: "16px", fontWeight: "700", margin: 0 },
+  desc: { color: "#6b7280", fontSize: "13px", margin: 0, flex: 1 },
+  cardBottom: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" },
+  price: { color: "#7c3aed", fontSize: "18px", fontWeight: "800" },
+  editBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
+  deleteBtn: { background: "transparent", border: "1px solid #7f1d1d", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
+};
 
 export default Services;
