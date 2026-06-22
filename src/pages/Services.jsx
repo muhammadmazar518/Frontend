@@ -129,7 +129,15 @@ const styles = {
   editBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
   deleteBtn: { background: "transparent", border: "1px solid #7f1d1d", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
 
-dashboardBtn: {
+ topRow: {
+    display: "flex",
+    justifyContent: "flex-end",
+    width: "100%",
+    marginBottom: "10px",
+    marginTop: "-10px"
+  },
+
+  dashboardBtn: {
     background: "#000",
     color: "#fff",
     border: "none",
