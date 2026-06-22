@@ -37,7 +37,7 @@ const Contact = () => {
                 message: form.message,
             });
             setSuccess("✅ Message sent! We'll reply within 24 hours.");
-            setForm({ from_name: "", from_email: "", subject: "", message: "" });
+            setForm({ name: "", email: "", subject: "", message: "" });
         } catch {
             setError("Failed to send. Please try again.");
         } finally {
