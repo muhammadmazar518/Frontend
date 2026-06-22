@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { getProfile, updateProfile } from "../api";
 
 const Profile = () => {
@@ -10,6 +11,7 @@ const Profile = () => {
   const [photo, setPhoto] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const fileRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProfile()
@@ -23,7 +25,7 @@ const Profile = () => {
       .catch(() => setError("Failed to load profile."))
       .finally(() => setLoading(false));
 
-    // ✅ photo sirf tab load karo jab same user ho
+    
     const token = localStorage.getItem("token");
     const savedPhoto = localStorage.getItem("profile_photo");
     const savedToken = localStorage.getItem("photo_token");
@@ -31,7 +33,7 @@ const Profile = () => {
     if (savedPhoto && savedToken === token) {
       setPhoto(savedPhoto);
     } else {
-      // naya user hai — photo clear karo
+      
       setPhoto(null);
       localStorage.removeItem("profile_photo");
     }
@@ -190,6 +192,12 @@ const Profile = () => {
 };
 
 const styles = {
+
+   page: {
+    padding: "40px",
+    background: "#1B1464",
+    minHeight: "100vh",
+  },
   heading: {
     color: "#fff",
     fontSize: "28px",

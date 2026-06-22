@@ -187,6 +187,13 @@ export default function Courses({ onNavigate }) {
 }
 
 const styles = {
+
+  page: {
+    padding: "40px",
+    background: "#1B1464",
+    minHeight: "100vh",
+  },
+
   pageWrapper: { 
       display: "flex", 
       flexDirection: "column", 

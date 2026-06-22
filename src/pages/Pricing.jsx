@@ -316,6 +316,12 @@ const Pricing = () => {
 };
 
 const styles = {
+
+  page: {
+    padding: "40px",
+    background: "#1B1464",
+    minHeight: "100vh",
+  },
   heading: { 
       color: "#fff", 
       fontSize: "30px", 

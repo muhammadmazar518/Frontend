@@ -48,7 +48,7 @@ const Landing = () => {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #0057ff 0%, #0d7dff 50%, #35a8ff 100%)",
+    background: "#1B1464",
     fontFamily: "'Segoe UI', sans-serif",
     display: "flex",
     flexDirection: "column",

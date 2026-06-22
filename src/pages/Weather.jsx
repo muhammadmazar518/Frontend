@@ -189,7 +189,7 @@ const Weather = () => {
 const styles = {
   page: { 
       fontFamily: "'Segoe UI', sans-serif", 
-      background: "#fff", 
+      background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)", 
       color: "#111827", 
       margin: 0, 
       padding: 0 

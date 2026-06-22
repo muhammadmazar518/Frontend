@@ -58,6 +58,7 @@ const styles = {
   page: {
     width: "100%",
     boxSizing: "border-box",
+    background: "#1B1464",
   },
   heading: {
     color: "#fff",

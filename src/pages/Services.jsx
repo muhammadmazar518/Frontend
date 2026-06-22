@@ -119,7 +119,7 @@ const Services = () => {
 };
 
 const styles = {
-  page: { padding: "40px", background: "#0d0f14", minHeight: "100vh" },
+  page: { padding: "40px", background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)", minHeight: "100vh" },
   heading: { color: "#fff", fontSize: "28px", fontWeight: "800", margin: "0 0 4px" },
   sub: { color: "#6b7280", fontSize: "14px", marginBottom: "24px" },
   formCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "20px", marginBottom: "32px", display: "flex", flexDirection: "column", gap: "12px" },

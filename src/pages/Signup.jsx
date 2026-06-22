@@ -129,7 +129,7 @@ const Signup = () => {
 const styles = {
   page: { 
       minHeight: "100vh", 
-      background: "linear-gradient(135deg, #0057ff 0%, #0d7dff 50%, #35a8ff 100%)", 
+      background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
       display: "flex", 
       alignItems: "center", 
       justifyContent: "center", 
