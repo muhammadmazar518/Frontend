@@ -151,7 +151,7 @@ const Pricing = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    fetch(`${import.meta.env.VITE_API_URL}/api/user/profile`, {
+    fetch(`${import.meta.env.VITE_API_URL}/user/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
