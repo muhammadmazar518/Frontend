@@ -67,16 +67,6 @@ const Weather = () => {
   const navigate = useNavigate();
   return (
     <div>
-       <div style={styles.topRow}> 
-        <button 
-          onClick={() => navigate("/dashboard")} 
-          style={styles.dashboardBtn}
-          onMouseEnter={(e) => { e.target.style.background = "#1d4ed8"; }}
-          onMouseLeave={(e) => { e.target.style.background = "#2563eb"; }}
-        >
-          Home
-        </button>
-      </div>
       <h1 style={styles.heading}>Weather</h1>
       <p style={styles.sub}>Live weather for your current location
       </p>

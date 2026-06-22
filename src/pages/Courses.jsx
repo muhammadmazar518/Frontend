@@ -64,18 +64,6 @@ export default function Courses({ onNavigate }) {
 
   return (
     <div style={styles.pageWrapper}>
-      
-      <div style={styles.topRow}> 
-        <button 
-          onClick={() => navigate("/dashboard")} 
-          style={styles.dashboardBtn}
-          onMouseEnter={(e) => { e.target.style.background = "#1d4ed8"; }}
-          onMouseLeave={(e) => { e.target.style.background = "#2563eb"; }}
-        >
-          Home
-        </button>
-      </div>
-
       <div style={styles.mainLayout}>
         
         <div style={{ ...styles.listColumn, flex: activeCourse ? "0 0 360px" : 1 }}>
@@ -201,24 +189,6 @@ const styles = {
       gap: "1rem" 
   },
   
-  topRow: { 
-      display: "flex", 
-      justifyContent: "flex-end", 
-      width: "100%", 
-      marginBottom: "10px", 
-      marginTop: "-10px" 
-  },
-  
-  dashboardBtn: { 
-      background: "#000", 
-      color: "#fff", 
-      border: "none", 
-      padding: "10px 15px", 
-      borderRadius: "8px", 
-      cursor: "pointer", 
-      fontWeight: "600", 
-      transition: "background 0.2s" 
-  },
   
   mainLayout: { 
       display: "flex", 

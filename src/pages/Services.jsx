@@ -54,16 +54,6 @@ const Services = () => {
   return (
     <div style={styles.page}>
 
-      <div style={styles.topRow}>
-        <button
-          onClick={() => navigate("/dashboard")}
-          style={styles.dashboardBtn}
-          onMouseEnter={(e) => { e.target.style.background = "#1d4ed8"; }}
-          onMouseLeave={(e) => { e.target.style.background = "#2563eb"; }}
-        >
-          Home
-        </button>
-      </div>
 
       <h1 style={styles.heading}>Services</h1>
       <p style={styles.sub}>Manage your services</p>
@@ -128,25 +118,6 @@ const styles = {
   price: { color: "#7c3aed", fontSize: "18px", fontWeight: "800" },
   editBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
   deleteBtn: { background: "transparent", border: "1px solid #7f1d1d", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
-
- topRow: {
-    display: "flex",
-    justifyContent: "flex-end",
-    width: "100%",
-    marginBottom: "10px",
-    marginTop: "-10px"
-  },
-
-  dashboardBtn: {
-    background: "#000",
-    color: "#fff",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "600",
-    transition: "background 0.2s"
-  }
 };
 
 export default Services;

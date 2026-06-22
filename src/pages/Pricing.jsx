@@ -209,17 +209,6 @@ const Pricing = () => {
 
   return (
     <div style={styles.page}>
-      <div style={styles.topRow}>
-        <button
-          onClick={() => navigate("/dashboard")}
-          style={styles.dashboardBtn}
-          onMouseEnter={(e) => { e.target.style.background = "#1d4ed8"; }}
-          onMouseLeave={(e) => { e.target.style.background = "#2563eb"; }}
-        >
-          Home
-        </button>
-      </div>
-
       <h1 style={styles.heading}>Pricing Plans</h1>
       <p style={styles.sub}>Choose the plan that works best for you and your team.</p>
 
@@ -367,8 +356,6 @@ const styles = {
   faqCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "12px", padding: "20px" },
   faqQ: { color: "#fff", fontSize: "14px", fontWeight: "600", margin: "0 0 8px" },
   faqA: { color: "#6b7280", fontSize: "13px", margin: 0, lineHeight: "1.6" },
-  topRow: { display: "flex", justifyContent: "flex-end", marginBottom: "10px", marginTop: "-10px" },
-  dashboardBtn: { background: "#2563eb", color: "#fff", border: "none", padding: "10px 15px", borderRadius: "8px", cursor: "pointer", fontWeight: "600", transition: "background 0.2s" },
 };
 
 export default Pricing;

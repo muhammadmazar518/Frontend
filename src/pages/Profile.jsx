@@ -72,16 +72,6 @@ const Profile = () => {
 
   return (
     <div style={styles.page}>
-      <div style={styles.topRow}>
-        <button
-          onClick={() => navigate("/dashboard")}
-          style={styles.dashboardBtn}
-          onMouseEnter={(e) => { e.target.style.background = "#1d4ed8"; }}
-          onMouseLeave={(e) => { e.target.style.background = "#2563eb"; }}
-        >
-          Home
-        </button>
-      </div>
       <h1 style={styles.heading}>My Profile</h1>
       <p style={styles.sub}>Manage your account information</p>
 
@@ -430,24 +420,6 @@ const styles = {
     fontSize: "14px"
   },
 
-  topRow: {
-    display: "flex",
-    justifyContent: "flex-end",
-    width: "100%",
-    marginBottom: "10px",
-    marginTop: "-10px"
-  },
-
-  dashboardBtn: {
-    background: "#000",
-    color: "#fff",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "600",
-    transition: "background 0.2s"
-  }
 };
 
 export default Profile;
