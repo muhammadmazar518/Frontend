@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const plans = {
@@ -145,7 +145,24 @@ const plans = {
 const Pricing = () => {
   const navigate = useNavigate();
   const [billing, setBilling] = useState("monthly");
-  const [loadingPlan, setLoadingPlan] = useState(null); 
+  const [loadingPlan, setLoadingPlan] = useState(null);
+  const [userPlan, setUserPlan] = useState("Free"); // ✅
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    fetch(`${import.meta.env.VITE_API_URL}/api/user/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.is_pro || data.has_purchased) {
+          setUserPlan("Professional");
+        } else {
+          setUserPlan("Free");
+        }
+      });
+  }, []);
 
   const currentPlans = plans[billing];
 
@@ -190,9 +207,8 @@ const Pricing = () => {
   };
 
   return (
-    <div style={styles.page}> 
-
-     <div style={styles.topRow}>
+    <div style={styles.page}>
+      <div style={styles.topRow}>
         <button
           onClick={() => navigate("/dashboard")}
           style={styles.dashboardBtn}
@@ -280,16 +296,21 @@ const Pricing = () => {
 
             <button
               onClick={() => handleCheckout(plan)}
-              disabled={loadingPlan !== null}
+              disabled={loadingPlan !== null || userPlan === plan.name}
               style={{
                 ...styles.ctaBtn,
-                background: plan.highlight ? plan.color : "transparent",
-                color: plan.highlight ? "#fff" : plan.color,
-                border: `1px solid ${plan.color}`,
-                opacity: loadingPlan && loadingPlan !== plan.name ? 0.5 : 1
+                background: userPlan === plan.name ? "#22c55e" : plan.highlight ? plan.color : "transparent",
+                color: "#fff",
+                border: userPlan === plan.name ? "1px solid #22c55e" : `1px solid ${plan.color}`,
+                opacity: loadingPlan && loadingPlan !== plan.name ? 0.5 : 1,
+                cursor: userPlan === plan.name ? "default" : "pointer",
               }}
             >
-              {loadingPlan === plan.name ? "Connecting..." : plan.cta}
+              {loadingPlan === plan.name
+                ? "Connecting..."
+                : userPlan === plan.name
+                ? "✓ Current Plan"
+                : plan.cta}
             </button>
           </div>
         ))}
@@ -316,242 +337,37 @@ const Pricing = () => {
 };
 
 const styles = {
-
-  page: {
-    padding: "40px",
-    background: "#1B1464",
-    minHeight: "100vh",
-  },
-  heading: { 
-      color: "#fff", 
-      fontSize: "30px", 
-      fontWeight: "800", 
-      margin: "0 0 5px", 
-      letterSpacing: "-0.5px" 
-  },
-  
-  sub: { 
-      color: "#000", 
-      fontSize: "14px", 
-      marginBottom: "28px" 
-  },
-  
-  toggleWrap: { 
-      display: "flex", 
-      background: "#161824", 
-      border: "1px solid #1e2130", 
-      borderRadius: "12px", 
-      padding: "4px", 
-      width: "fit-content", 
-      marginBottom: "36px", 
-      gap: "4px" 
-  },
-  
-  toggleBtn: { 
-      padding: "8px 20px", 
-      borderRadius: "8px", 
-      border: "none", 
-      fontSize: "14px", 
-      fontWeight: "600", 
-      cursor: "pointer", 
-      display: "flex", 
-      alignItems: "center", 
-      gap: "8px", 
-      transition: "all 0.2s" 
-  },
-  
-  saveBadge: { 
-      background: "#052e16", 
-      color: "#34d399", 
-      fontSize: "10px", 
-      fontWeight: "700", 
-      padding: "2px 8px", 
-      borderRadius: "20px" 
-  },
-  
-  grid: { 
-      display: "grid", 
-      gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", 
-      gap: "24px", 
-      marginBottom: "40px", 
-      alignItems: "start" 
-  },
-  
-  card: { 
-      background: "#161824", 
-      borderRadius: "20px", 
-      padding: "28px", 
-      position: "relative", 
-      display: "flex", 
-      flexDirection: "column", 
-      gap: "16px", 
-      transition: "transform 0.2s" 
-  },
-  
-  popularBadge: { 
-      position: "absolute", 
-      top: "-14px", 
-      left: "50%", 
-      transform: "translateX(-50%)", 
-      color: "#fff", 
-      fontSize: "11px", 
-      fontWeight: "700", 
-      padding: "4px 16px", 
-      borderRadius: "20px", 
-      whiteSpace: "nowrap" 
-  },
-  
-  yearSaveBadge: { 
-      position: "absolute", 
-      top: "16px", 
-      right: "16px", 
-      background: "#052e16", 
-      color: "#34d399", 
-      fontSize: "10px", 
-      fontWeight: "700", 
-      padding: "3px 10px", 
-      borderRadius: "20px", 
-      border: "1px solid #166534" 
-  },
-  
-  cardHeader: { 
-      display: "flex", 
-      alignItems: "flex-start", 
-      gap: "12px" 
-  },
-  
-  planIcon: { 
-      fontSize: "28px", 
-      flexShrink: 0 
-  },
-  
-  planName: { 
-      color: "#fff", 
-      fontSize: "18px", 
-      fontWeight: "700", 
-      margin: "0 0 4px" 
-  },
-  
-  planDesc: { 
-      color: "#6b7280", 
-      fontSize: "12px", 
-      margin: 0, 
-      lineHeight: "1.5" 
-  },
-  
-  priceRow: { 
-      display: "flex", 
-      alignItems: "baseline", 
-      gap: "6px" 
-  },
-  
-  price: { 
-      fontSize: "40px", 
-      fontWeight: "800", 
-      letterSpacing: "-1px" 
-  },
-  
-  period: { 
-      color: "#6b7280", 
-      fontSize: "14px" 
-  },
-  
-  divider: { 
-      height: "1px", 
-      background: "#1e2130" 
-  },
-  
-  featureList: { 
-      listStyle: "none", 
-      padding: 0, 
-      margin: 0, 
-      display: "flex", 
-      flexDirection: "column", 
-      gap: "10px" 
-  },
-  
-  featureItem: { 
-      display: "flex", 
-      alignItems: "center", 
-      gap: "10px" 
-  },
-  
-  featureIcon: { 
-      fontSize: "13px", 
-      fontWeight: "700", 
-      width: "16px", 
-      flexShrink: 0 
-  },
-  
-  featureText: { 
-      fontSize: "13px" 
-  },
-  
-  ctaBtn: { 
-      width: "100%", 
-      padding: "13px", 
-      borderRadius: "10px", 
-      fontSize: "14px", 
-      fontWeight: "700", 
-      cursor: "pointer", 
-      marginTop: "8px", 
-      transition: "all 0.2s" 
-  },
-  
-  faqSection: { 
-      marginTop: "16px" 
-  },
-  
-  faqTitle: { 
-      color: "#fff", 
-      fontSize: "20px", 
-      fontWeight: "700", 
-      marginBottom: "20px" 
-  },
-  
-  faqGrid: { 
-      display: "grid", 
-      gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", 
-      gap: "16px" 
-  },
-  
-  faqCard: { 
-      background: "#161824", 
-      border: "1px solid #1e2130", 
-      borderRadius: "12px", 
-      padding: "20px" 
-  },
-  
-  faqQ: { 
-      color: "#fff", 
-      fontSize: "14px", 
-      fontWeight: "600", 
-      margin: "0 0 8px" 
-  },
-  
-  faqA: { 
-      color: "#6b7280", 
-      fontSize: "13px", 
-      margin: 0, 
-      lineHeight: "1.6" 
-  },
-  
-  topRow: { 
-      display: "flex", 
-      justifyContent: "flex-start", 
-      marginBottom: "10px", 
-      marginTop: "-10px", 
-      marginLeft: "900px" 
-  },
-  
-  dashboardBtn: { 
-      background: "#000", 
-      color: "#fff", 
-      border: "none", 
-      padding: "10px 15px", 
-      borderRadius: "8px", 
-      cursor: "pointer" 
-  }
+  page: { padding: "40px", background: "#1B1464", minHeight: "100vh" },
+  heading: { color: "#fff", fontSize: "30px", fontWeight: "800", margin: "0 0 5px", letterSpacing: "-0.5px" },
+  sub: { color: "#9ca3af", fontSize: "14px", marginBottom: "28px" },
+  toggleWrap: { display: "flex", background: "#161824", border: "1px solid #1e2130", borderRadius: "12px", padding: "4px", width: "fit-content", marginBottom: "36px", gap: "4px" },
+  toggleBtn: { padding: "8px 20px", borderRadius: "8px", border: "none", fontSize: "14px", fontWeight: "600", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", transition: "all 0.2s" },
+  saveBadge: { background: "#052e16", color: "#34d399", fontSize: "10px", fontWeight: "700", padding: "2px 8px", borderRadius: "20px" },
+  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", marginBottom: "40px", alignItems: "start" },
+  card: { background: "#161824", borderRadius: "20px", padding: "28px", position: "relative", display: "flex", flexDirection: "column", gap: "16px", transition: "transform 0.2s" },
+  popularBadge: { position: "absolute", top: "-14px", left: "50%", transform: "translateX(-50%)", color: "#fff", fontSize: "11px", fontWeight: "700", padding: "4px 16px", borderRadius: "20px", whiteSpace: "nowrap" },
+  yearSaveBadge: { position: "absolute", top: "16px", right: "16px", background: "#052e16", color: "#34d399", fontSize: "10px", fontWeight: "700", padding: "3px 10px", borderRadius: "20px", border: "1px solid #166534" },
+  cardHeader: { display: "flex", alignItems: "flex-start", gap: "12px" },
+  planIcon: { fontSize: "28px", flexShrink: 0 },
+  planName: { color: "#fff", fontSize: "18px", fontWeight: "700", margin: "0 0 4px" },
+  planDesc: { color: "#6b7280", fontSize: "12px", margin: 0, lineHeight: "1.5" },
+  priceRow: { display: "flex", alignItems: "baseline", gap: "6px" },
+  price: { fontSize: "40px", fontWeight: "800", letterSpacing: "-1px" },
+  period: { color: "#6b7280", fontSize: "14px" },
+  divider: { height: "1px", background: "#1e2130" },
+  featureList: { listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" },
+  featureItem: { display: "flex", alignItems: "center", gap: "10px" },
+  featureIcon: { fontSize: "13px", fontWeight: "700", width: "16px", flexShrink: 0 },
+  featureText: { fontSize: "13px" },
+  ctaBtn: { width: "100%", padding: "13px", borderRadius: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", marginTop: "8px", transition: "all 0.2s" },
+  faqSection: { marginTop: "16px" },
+  faqTitle: { color: "#fff", fontSize: "20px", fontWeight: "700", marginBottom: "20px" },
+  faqGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" },
+  faqCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "12px", padding: "20px" },
+  faqQ: { color: "#fff", fontSize: "14px", fontWeight: "600", margin: "0 0 8px" },
+  faqA: { color: "#6b7280", fontSize: "13px", margin: 0, lineHeight: "1.6" },
+  topRow: { display: "flex", justifyContent: "flex-end", marginBottom: "10px", marginTop: "-10px" },
+  dashboardBtn: { background: "#2563eb", color: "#fff", border: "none", padding: "10px 15px", borderRadius: "8px", cursor: "pointer", fontWeight: "600", transition: "background 0.2s" },
 };
 
 export default Pricing;
