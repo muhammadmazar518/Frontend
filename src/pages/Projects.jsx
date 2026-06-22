@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -10,6 +11,7 @@ const statusColors = {
 };
 
 const Projects = () => {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [form, setForm] = useState({ title: "", description: "", status: "Planning", icon: "📁" });
   const [editId, setEditId] = useState(null);
@@ -29,10 +31,10 @@ const Projects = () => {
     if (!form.title) return;
     setLoading(true);
     if (editId) {
-      await axios.put(`${API}/projects/${editId}`, form, { headers });
+      await axios.put(`${API}/api/projects/${editId}`, form, { headers });
       setEditId(null);
     } else {
-      await axios.post(`${API}/projects`, form, { headers });
+      await axios.post(`${API}/api/projects`, form, { headers });
     }
     setForm({ title: "", description: "", status: "Planning", icon: "📁" });
     fetchProjects();
@@ -46,7 +48,7 @@ const Projects = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this project?")) return;
-    await axios.delete(`${API}/projects/${id}`, { headers });
+    await axios.delete(`${API}/api/projects/${id}`, { headers });
     fetchProjects();
   };
 
@@ -57,52 +59,39 @@ const Projects = () => {
 
   return (
     <div style={styles.page}>
+
+      <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: "10px" }}>
+        <button
+          onClick={() => navigate("/dashboard")}
+          style={{ background: "#000", color: "#fff", border: "none", padding: "10px 15px", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}
+        >
+          Home
+        </button>
+      </div>
+
       <h1 style={styles.heading}>Projects</h1>
       <p style={styles.sub}>Manage your projects</p>
 
-      {/* Form */}
       <div style={styles.formCard}>
         <h3 style={styles.formTitle}>{editId ? "✏️ Edit Project" : "➕ Add Project"}</h3>
         <div style={styles.formRow}>
-          <input
-            placeholder="Title *"
-            value={form.title}
-            onChange={e => setForm({ ...form, title: e.target.value })}
-            style={styles.input}
-          />
-          <select
-            value={form.status}
-            onChange={e => setForm({ ...form, status: e.target.value })}
-            style={styles.input}
-          >
+          <input placeholder="Title *" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} style={styles.input} />
+          <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} style={styles.input}>
             <option>Planning</option>
             <option>In Progress</option>
             <option>Live</option>
           </select>
-          <input
-            placeholder="Icon 📁"
-            value={form.icon}
-            onChange={e => setForm({ ...form, icon: e.target.value })}
-            style={{ ...styles.input, maxWidth: "80px" }}
-          />
+          <input placeholder="Icon 📁" value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} style={{ ...styles.input, maxWidth: "80px" }} />
         </div>
-        <textarea
-          placeholder="Description"
-          value={form.description}
-          onChange={e => setForm({ ...form, description: e.target.value })}
-          style={styles.textarea}
-        />
+        <textarea placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} style={styles.textarea} />
         <div style={{ display: "flex", gap: "10px" }}>
           <button onClick={handleSubmit} style={styles.addBtn} disabled={loading}>
             {loading ? "Saving..." : editId ? "✓ Update" : "+ Add"}
           </button>
-          {editId && (
-            <button onClick={handleCancel} style={styles.cancelBtn}>Cancel</button>
-          )}
+          {editId && <button onClick={handleCancel} style={styles.cancelBtn}>Cancel</button>}
         </div>
       </div>
 
-      {/* Cards */}
       {projects.length === 0 ? (
         <p style={{ color: "#6b7280" }}>No projects yet. Add one above!</p>
       ) : (
@@ -135,7 +124,7 @@ const Projects = () => {
 };
 
 const styles = {
-  page: { padding: "40px", background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)", minHeight: "100vh" },
+  page: { padding: "40px", background: "#1B1464", minHeight: "100vh" },
   heading: { color: "#fff", fontSize: "28px", fontWeight: "800", margin: "0 0 4px" },
   sub: { color: "#6b7280", fontSize: "14px", marginBottom: "24px" },
   formCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "20px", marginBottom: "32px", display: "flex", flexDirection: "column", gap: "12px" },

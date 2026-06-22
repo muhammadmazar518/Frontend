@@ -51,7 +51,6 @@ const Profile = () => {
     reader.onload = (ev) => {
       setPhoto(ev.target.result);
       localStorage.setItem("profile_photo", ev.target.result);
-      // ✅ is photo ka token save karo
       localStorage.setItem("photo_token", localStorage.getItem("token"));
       window.dispatchEvent(new CustomEvent("profile_photo_updated"));
     };
