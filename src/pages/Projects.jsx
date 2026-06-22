@@ -31,10 +31,10 @@ const Projects = () => {
     if (!form.title) return;
     setLoading(true);
     if (editId) {
-      await axios.put(`${API}/api/projects/${editId}`, form, { headers });
+      await axios.put(`${API}/projects/${editId}`, form, { headers });
       setEditId(null);
     } else {
-      await axios.post(`${API}/api/projects`, form, { headers });
+      await axios.post(`${API}/projects`, form, { headers });
     }
     setForm({ title: "", description: "", status: "Planning", icon: "📁" });
     fetchProjects();
@@ -48,7 +48,7 @@ const Projects = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this project?")) return;
-    await axios.delete(`${API}/api/projects/${id}`, { headers });
+    await axios.delete(`${API}/projects/${id}`, { headers });
     fetchProjects();
   };
 
@@ -60,15 +60,16 @@ const Projects = () => {
   return (
     <div style={styles.page}>
 
-      <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: "10px" }}>
+      <div style={styles.topRow}>
         <button
           onClick={() => navigate("/dashboard")}
-          style={{ background: "#000", color: "#fff", border: "none", padding: "10px 15px", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}
+          style={styles.dashboardBtn}
+          onMouseEnter={(e) => { e.target.style.background = "#1d4ed8"; }}
+          onMouseLeave={(e) => { e.target.style.background = "#2563eb"; }}
         >
           Home
         </button>
       </div>
-
       <h1 style={styles.heading}>Projects</h1>
       <p style={styles.sub}>Manage your projects</p>
 
@@ -144,6 +145,17 @@ const styles = {
   cardBottom: { display: "flex", gap: "8px", marginTop: "auto" },
   editBtn: { flex: 1, background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "6px 10px", color: "#d1d5db", fontSize: "12px", cursor: "pointer" },
   deleteBtn: { flex: 1, background: "transparent", border: "1px solid #7f1d1d", borderRadius: "8px", padding: "6px 10px", color: "#ef4444", fontSize: "12px", cursor: "pointer" },
+dashboardBtn: {
+    background: "#000",
+    color: "#fff",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "600",
+    transition: "background 0.2s"
+  }
+
 };
 
 export default Projects;
