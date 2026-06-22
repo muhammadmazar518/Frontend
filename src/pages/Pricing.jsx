@@ -146,7 +146,7 @@ const Pricing = () => {
   const navigate = useNavigate();
   const [billing, setBilling] = useState("monthly");
   const [loadingPlan, setLoadingPlan] = useState(null);
-  const [userPlan, setUserPlan] = useState("Free"); // ✅
+  const [userPlan, setUserPlan] = useState("Free"); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -156,6 +156,7 @@ const Pricing = () => {
     })
       .then(res => res.json())
       .then(data => {
+        console.log("USER DATA:", data);
         if (data.is_pro || data.has_purchased) {
           setUserPlan("Professional");
         } else {
