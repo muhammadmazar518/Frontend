@@ -14,9 +14,9 @@ const PaymentSuccess = () => {
       .then((res) => {
         if (res.data.success) {
           setStatus("success");
-          // Force full page reload so courses refresh with new pro status
+      
           setTimeout(() => {
-            window.location.href = "/courses";
+            window.location.href = "/pricing";
           }, 3000);
         } else {
           setStatus("failed");
