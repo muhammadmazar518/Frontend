@@ -29,9 +29,16 @@ const STEPS = [
 
 const STEPS_KEY = "saaspanel_onboarding";
 
+const formatMemberSince = (date) => {
+  if (!date) return "—";
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+};
+
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
-  const [name, setName] = useState("");
+  const [profile, setProfile] = useState(null);
   const [done, setDone] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem(STEPS_KEY)) || {};
@@ -46,7 +53,7 @@ const Dashboard = () => {
       .then((res) => setStats(res.data))
       .catch(() => {});
     getProfile()
-      .then((res) => setName(res.data?.name || res.data?.full_name || ""))
+      .then((res) => setProfile(res.data))
       .catch(() => {});
   }, []);
 
@@ -58,7 +65,15 @@ const Dashboard = () => {
 
   const doneCount = STEPS.filter((s) => done[s.key]).length;
   const pct = Math.round((doneCount / STEPS.length) * 100);
+  const name = profile?.name || profile?.full_name || "";
   const firstName = name.split(" ")[0] || "there";
+
+  const isPro = !!(profile?.is_pro || profile?.has_purchased);
+  const planName = profile?.plan || (isPro ? "Pro" : "Free");
+  const memberSince = formatMemberSince(profile?.created_at);
+
+  const accessibleCourses = stats?.accessibleCourses ?? null;
+  const lockedCourses = stats?.lockedCourses ?? 0;
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
@@ -66,9 +81,17 @@ const Dashboard = () => {
   const quickActions = [
     { label: "Edit Profile", icon: "👤", to: "/profile" },
     { label: "Check Weather", icon: "🌤", to: "/weather" },
-    { label: "View Courses", icon: "📚", to: "/courses" },
     { label: "Update Plan", icon: "💳", to: "/pricing" },
   ];
+
+  const courseLabel =
+    accessibleCourses > 0
+      ? lockedCourses > 0
+        ? `${lockedCourses} locked`
+        : "Available Courses"
+      : lockedCourses > 0
+      ? "All courses locked"
+      : "No courses yet";
 
   return (
     <div>
@@ -81,12 +104,24 @@ const Dashboard = () => {
       />
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Current Plan" value="Free" icon="💎" badge="Plan" />
-        <StatCard label="Account Status" value="Active" icon="🟢" badge="Status" />
-        <StatCard label="Member Since" value="Jun 2026" icon="📅" badge="Member Since" />
         <StatCard
-          label="Locked Courses"
-          value={stats ? (stats.lockedCourses ?? 0) : undefined}
+          label="Current Plan"
+          value={profile ? planName : undefined}
+          icon="💎"
+          badge="Plan"
+          loading={!profile}
+        />
+        <StatCard label="Account Status" value="Active" icon="🟢" badge="Status" />
+        <StatCard
+          label="Member Since"
+          value={profile ? memberSince : undefined}
+          icon="📅"
+          badge="Member Since"
+          loading={!profile}
+        />
+        <StatCard
+          label={courseLabel}
+          value={accessibleCourses === null ? undefined : accessibleCourses > 0 ? accessibleCourses : "—"}
           icon="📚"
           badge="Courses"
           loading={!stats}

@@ -4,6 +4,7 @@ import { PageHeader, Card, Input, Field, Button, ErrorBox, SuccessBox, Skeleton 
 
 const Profile = () => {
   const [form, setForm] = useState({ name: "", email: "", phone: "", website: "", profession: "" });
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState("");
@@ -21,16 +22,22 @@ const Profile = () => {
 
   useEffect(() => {
     getProfile()
-      .then((res) => setForm({
-        name: res.data.name || "",
-        email: res.data.email || "",
-        phone: res.data.phone || "",
-        website: res.data.website || "",
-        profession: res.data.profession || "",
-      }))
+      .then((res) => {
+        setProfile(res.data);
+        setForm({
+          name: res.data.name || "",
+          email: res.data.email || "",
+          phone: res.data.phone || "",
+          website: res.data.website || "",
+          profession: res.data.profession || "",
+        });
+      })
       .catch(() => setError("Failed to load profile."))
       .finally(() => setLoading(false));
   }, []);
+
+  const isPro = !!(profile?.is_pro || profile?.has_purchased);
+  const planLabel = (profile?.plan || (isPro ? "Pro" : "Free")).toUpperCase();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -102,7 +109,7 @@ const Profile = () => {
             <h2 className="m-0 font-display text-[22px] font-extrabold text-text">{form.name || "User"}</h2>
             <p className="mt-1 mb-2.5 text-sm text-text-2">{form.email || ""}</p>
             <span className="inline-block rounded-full border border-line bg-surface-3/60 px-3.5 py-1 text-[11px] font-bold text-text-2">
-              FREE PLAN
+              {planLabel} PLAN
             </span>
           </div>
 

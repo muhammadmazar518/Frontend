@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { PageHeader, Card, Input, Button, Spinner, ErrorBox } from "../components/ui";
 
 const WEATHER_API_KEY = "066719477ade4350b7f100338261106";
@@ -16,6 +16,24 @@ const getColor = (condition) => {
   return "#38bdf8";
 };
 
+const fetchWeatherData = async (query) => {
+  const res = await fetch(
+    `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${query}&days=5&aqi=no`
+  );
+  if (!res.ok) throw new Error("City not found. Please try another name.");
+  return res.json();
+};
+
+const detectLocation = () =>
+  new Promise((resolve) => {
+    if (!navigator.geolocation) return resolve("auto:ip");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => resolve(`${pos.coords.latitude},${pos.coords.longitude}`),
+      () => resolve("auto:ip"),
+      { timeout: 8000, maximumAge: 600000, enableHighAccuracy: false }
+    );
+  });
+
 const Weather = () => {
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
@@ -23,74 +41,60 @@ const Weather = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchCity, setSearchCity] = useState("");
+  const [autoDetected, setAutoDetected] = useState(false);
+  const requestId = useRef(0);
+  const searchTimer = useRef(null);
 
-  const fetchWeather = async (query) => {
+  const load = useCallback(async (query, { fromAutoIp = false } = {}) => {
+    const id = ++requestId.current;
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${query}&days=5&aqi=no`
-      );
-      if (!res.ok) throw new Error("City not found. Please try another name.");
-      const data = await res.json();
+      const data = await fetchWeatherData(query);
+      if (requestId.current !== id) return;
       setWeather(data.current);
       setForecast(data.forecast.forecastday);
       setLocation(`${data.location.name}, ${data.location.country}`);
+      setAutoDetected(fromAutoIp);
     } catch (err) {
+      if (requestId.current !== id) return;
       setError(err.message || "Failed to fetch weather.");
     } finally {
-      setLoading(false);
+      if (requestId.current === id) setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
-
-    const queryCity = () =>
-      new Promise((resolve) => {
-        if (!navigator.geolocation) return resolve("Lahore");
-        navigator.geolocation.getCurrentPosition(
-          (pos) => resolve(`${pos.coords.latitude},${pos.coords.longitude}`),
-          () => resolve("Lahore")
-        );
-      });
-
-    queryCity()
-      .then((q) =>
-        fetch(`https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${q}&days=5&aqi=no`)
-      )
-      .then((res) => {
-        if (!res.ok) throw new Error("City not found. Please try another name.");
-        return res.json();
-      })
-      .then((data) => {
-        if (cancelled) return;
-        setWeather(data.current);
-        setForecast(data.forecast.forecastday);
-        setLocation(`${data.location.name}, ${data.location.country}`);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err.message || "Failed to fetch weather.");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
+    detectLocation().then((q) => {
+      if (cancelled) return;
+      load(q, { fromAutoIp: q === "auto:ip" });
+    });
     return () => {
       cancelled = true;
+      requestId.current += 1;
     };
-  }, []);
+  }, [load]);
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchCity(value);
+    setError("");
+    clearTimeout(searchTimer.current);
+    const trimmed = value.trim();
+    if (!trimmed) return;
+    searchTimer.current = setTimeout(() => load(trimmed), 600);
+  };
 
   const handleSearch = () => {
-    if (searchCity.trim()) fetchWeather(searchCity.trim());
+    clearTimeout(searchTimer.current);
+    if (searchCity.trim()) load(searchCity.trim());
   };
 
   const useLocation = () => {
     setSearchCity("");
-    navigator.geolocation?.getCurrentPosition(
-      (pos) => fetchWeather(`${pos.coords.latitude},${pos.coords.longitude}`),
-      () => fetchWeather("Lahore")
-    );
+    clearTimeout(searchTimer.current);
+    detectLocation().then((q) => load(q, { fromAutoIp: q === "auto:ip" }));
   };
 
   const accentColor = weather ? getColor(weather.condition.text) : "#38bdf8";
@@ -103,7 +107,7 @@ const Weather = () => {
         <span className="text-lg">📍</span>
         <Input
           value={searchCity}
-          onChange={(e) => setSearchCity(e.target.value)}
+          onChange={handleSearchChange}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           placeholder="Search another city..."
           className="max-w-[360px]"
@@ -115,7 +119,7 @@ const Weather = () => {
       {loading && (
         <div className="flex flex-col items-center py-[60px] text-center">
           <Spinner />
-          <p className="mt-4 text-sm text-text-2">Detecting your location...</p>
+          <p className="mt-4 text-sm text-text-2">Loading weather...</p>
         </div>
       )}
 
@@ -129,6 +133,14 @@ const Weather = () => {
                 <div className="mb-3 flex items-center gap-1.5">
                   <span className="text-base">📍</span>
                   <span className="text-sm font-semibold text-text-2">{location}</span>
+                  {autoDetected && (
+                    <span
+                      className="rounded-full border border-line bg-surface-3/60 px-2 py-0.5 text-[10px] font-bold text-text-3"
+                      title="Your browser blocked GPS, so location was detected from your IP address."
+                    >
+                      IP-BASED
+                    </span>
+                  )}
                 </div>
                 <div className="mb-2 flex items-center gap-2">
                   <img
