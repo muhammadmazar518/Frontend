@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { PageHeader, Card, Input, Textarea, Button, EmptyState, Skeleton } from "../components/ui";
+import { ConfirmDialog } from "../components/ConfirmDialog";
+import { useToast } from "../components/Toast";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const Services = () => {
-  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [form, setForm] = useState({ title: "", description: "", price: "", icon: "🌐" });
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const toast = useToast();
 
   const token = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}` };
@@ -19,31 +23,61 @@ const Services = () => {
     setServices(res.data);
   };
 
-  useEffect(() => { fetchServices(); }, []);
+  useEffect(() => {
+    axios
+      .get(`${API}/services`, { headers })
+      .then((res) => setServices(res.data))
+      .catch((err) => {
+        console.error(err);
+        toast.error("Could not load services. Check your connection and try again.");
+      })
+      .finally(() => setInitialLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async () => {
-    if (!form.title) return;
-    setLoading(true);
-    if (editId) {
-      await axios.put(`${API}/services/${editId}`, form, { headers });
-      setEditId(null);
-    } else {
-      await axios.post(`${API}/services`, form, { headers });
+    if (!form.title) {
+      toast.warning("Please add a title for your service.");
+      return;
     }
-    setForm({ title: "", description: "", price: "", icon: "🌐" });
-    fetchServices();
-    setLoading(false);
+    setLoading(true);
+    try {
+      if (editId) {
+        await axios.put(`${API}/services/${editId}`, form, { headers });
+        toast.success("Service updated.");
+        setEditId(null);
+      } else {
+        await axios.post(`${API}/services`, form, { headers });
+        toast.success("Service added.");
+      }
+      setForm({ title: "", description: "", price: "", icon: "🌐" });
+      fetchServices();
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not save the service. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEdit = (s) => {
     setEditId(s.id);
     setForm({ title: s.title, description: s.description, price: s.price, icon: s.icon });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this service?")) return;
-    await axios.delete(`${API}/services/${id}`, { headers });
-    fetchServices();
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    try {
+      await axios.delete(`${API}/services/${deleteTarget}`, { headers });
+      toast.success("Service deleted.");
+      fetchServices();
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not delete the service. Please try again.");
+    } finally {
+      setDeleteTarget(null);
+    }
   };
 
   const handleCancel = () => {
@@ -52,72 +86,101 @@ const Services = () => {
   };
 
   return (
-    <div style={styles.page}>
+    <div>
+      <PageHeader title="Services" sub="Manage the services you offer" />
 
-
-      <h1 style={styles.heading}>Services</h1>
-      <p style={styles.sub}>Manage your services</p>
-
-      <div style={styles.formCard}>
-        <h3 style={styles.formTitle}>{editId ? "✏️ Edit Service" : "➕ Add Service"}</h3>
-        <div style={styles.formRow}>
-          <input placeholder="Title *" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} style={styles.input} />
-          <input placeholder="Price (e.g. $500)" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} style={styles.input} />
-          <input placeholder="Icon 🌐" value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} style={{ ...styles.input, maxWidth: "80px" }} />
+      <Card className="mb-8 p-6">
+        <h3 className="mb-4 font-display text-base font-bold text-text">{editId ? "Edit Service" : "Add Service"}</h3>
+        <div className="mb-3 flex flex-wrap gap-3">
+          <Input
+            placeholder="Title *"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            className="min-w-[180px] flex-[2]"
+          />
+          <Input
+            placeholder="Price (e.g. $500)"
+            value={form.price}
+            onChange={(e) => setForm({ ...form, price: e.target.value })}
+            className="min-w-[140px] flex-1"
+          />
+          <Input
+            placeholder="🌐"
+            value={form.icon}
+            onChange={(e) => setForm({ ...form, icon: e.target.value })}
+            className="w-[76px] shrink-0"
+          />
         </div>
-        <textarea placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} style={styles.textarea} />
-        <div style={{ display: "flex", gap: "10px" }}>
-          <button onClick={handleSubmit} style={styles.addBtn} disabled={loading}>
+        <Textarea
+          placeholder="Description"
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          className="mb-3"
+        />
+        <div className="flex gap-2.5">
+          <Button onClick={handleSubmit} disabled={loading}>
             {loading ? "Saving..." : editId ? "✓ Update" : "+ Add"}
-          </button>
-          {editId && <button onClick={handleCancel} style={styles.cancelBtn}>Cancel</button>}
+          </Button>
+          {editId && (
+            <Button variant="ghost" onClick={handleCancel}>
+              Cancel
+            </Button>
+          )}
         </div>
-      </div>
+      </Card>
 
-      {services.length === 0 ? (
-        <p style={{ color: "#6b7280" }}>No services yet. Add one above!</p>
+      {initialLoading ? (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <Card key={i} className="flex flex-col gap-3 p-6">
+              <Skeleton width={52} height={52} radius={12} />
+              <Skeleton width="60%" height={18} />
+              <Skeleton width="100%" height={13} />
+              <Skeleton width="85%" height={13} />
+            </Card>
+          ))}
+        </div>
+      ) : services.length === 0 ? (
+        <EmptyState
+          icon="🛠"
+          title="No services yet"
+          sub="Add your first service above and it will show up here for you to manage."
+        />
       ) : (
-        <div style={styles.grid}>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s) => (
-            <div key={s.id} style={styles.card}>
-              <div style={styles.icon}>{s.icon}</div>
-              <h3 style={styles.title}>{s.title}</h3>
-              <p style={styles.desc}>{s.description}</p>
-              <div style={styles.cardBottom}>
-                <span style={styles.price}>{s.price}</span>
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <button onClick={() => handleEdit(s)} style={styles.editBtn}>✏️</button>
-                  <button onClick={() => handleDelete(s.id)} style={styles.deleteBtn}>🗑</button>
+            <div key={s.id} className="flex flex-col gap-2.5 rounded-lg border border-line bg-surface p-6 transition-shadow duration-200 hover:shadow-sm">
+              <div className="flex h-[52px] w-[52px] items-center justify-center rounded-md border border-primary/25 bg-primary-soft text-[26px]">
+                {s.icon}
+              </div>
+              <h3 className="m-0 font-display text-[16.5px] font-bold text-text">{s.title}</h3>
+              <p className="m-0 flex-1 text-[13px] leading-relaxed text-text-2">{s.description}</p>
+              <div className="mt-auto flex items-center justify-between">
+                <span className="text-lg font-extrabold text-primary">{s.price}</span>
+                <div className="flex gap-2">
+                  <button onClick={() => handleEdit(s)} className="cursor-pointer rounded-sm border border-line-strong bg-surface-2 px-2.5 py-1.5 text-sm transition-colors duration-200 hover:bg-surface-3" aria-label="Edit">
+                    ✏️
+                  </button>
+                  <button onClick={() => setDeleteTarget(s.id)} className="cursor-pointer rounded-sm border border-danger/30 bg-danger/10 px-2.5 py-1.5 text-sm transition-colors duration-200 hover:bg-danger/15" aria-label="Delete">
+                    🗑
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete service?"
+        message="This action cannot be undone. The service will be permanently removed."
+        confirmLabel="Delete"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
-};
-
-const styles = {
-  page: { padding: "40px", background: "#1B1464", minHeight: "100vh" },
-  heading: { color: "#fff", fontSize: "28px", fontWeight: "800", margin: "0 0 4px" },
-  sub: { color: "#6b7280", fontSize: "14px", marginBottom: "24px" },
-  formCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "20px", marginBottom: "32px", display: "flex", flexDirection: "column", gap: "12px" },
-  formTitle: { color: "#fff", fontSize: "15px", fontWeight: "700", margin: 0 },
-  formRow: { display: "flex", gap: "12px", flexWrap: "wrap" },
-  input: { background: "#0d0f14", border: "1px solid #1e2130", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none", flex: 1 },
-  textarea: { background: "#0d0f14", border: "1px solid #1e2130", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none", resize: "vertical", minHeight: "80px" },
-  addBtn: { background: "#7c3aed", border: "none", borderRadius: "8px", padding: "10px 24px", color: "#fff", fontSize: "14px", fontWeight: "700", cursor: "pointer" },
-  cancelBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "10px 20px", color: "#9ca3af", fontSize: "14px", cursor: "pointer" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "20px" },
-  card: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "24px", display: "flex", flexDirection: "column", gap: "10px" },
-  icon: { fontSize: "32px" },
-  title: { color: "#fff", fontSize: "16px", fontWeight: "700", margin: 0 },
-  desc: { color: "#6b7280", fontSize: "13px", margin: 0, flex: 1 },
-  cardBottom: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "auto" },
-  price: { color: "#7c3aed", fontSize: "18px", fontWeight: "800" },
-  editBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
-  deleteBtn: { background: "transparent", border: "1px solid #7f1d1d", borderRadius: "8px", padding: "6px 10px", cursor: "pointer", fontSize: "14px" },
 };
 
 export default Services;

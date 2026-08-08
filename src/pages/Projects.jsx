@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { PageHeader, Card, Input, Textarea, Select, Button, EmptyState, Skeleton } from "../components/ui";
+import { ConfirmDialog } from "../components/ConfirmDialog";
+import { useToast } from "../components/Toast";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const statusColors = {
-  "Live": "#22c55e",
-  "In Progress": "#f59e0b",
-  "Planning": "#6b7280",
+  Live: "#34d399",
+  "In Progress": "#fbbf24",
+  Planning: "#a1a1aa",
 };
 
 const Projects = () => {
-  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [form, setForm] = useState({ title: "", description: "", status: "Planning", icon: "📁" });
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const toast = useToast();
 
   const token = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}` };
@@ -25,31 +29,61 @@ const Projects = () => {
     setProjects(res.data);
   };
 
-  useEffect(() => { fetchProjects(); }, []);
+  useEffect(() => {
+    axios
+      .get(`${API}/projects`, { headers })
+      .then((res) => setProjects(res.data))
+      .catch((err) => {
+        console.error(err);
+        toast.error("Could not load projects. Check your connection and try again.");
+      })
+      .finally(() => setInitialLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async () => {
-    if (!form.title) return;
-    setLoading(true);
-    if (editId) {
-      await axios.put(`${API}/projects/${editId}`, form, { headers });
-      setEditId(null);
-    } else {
-      await axios.post(`${API}/projects`, form, { headers });
+    if (!form.title) {
+      toast.warning("Please add a title for your project.");
+      return;
     }
-    setForm({ title: "", description: "", status: "Planning", icon: "📁" });
-    fetchProjects();
-    setLoading(false);
+    setLoading(true);
+    try {
+      if (editId) {
+        await axios.put(`${API}/projects/${editId}`, form, { headers });
+        toast.success("Project updated.");
+        setEditId(null);
+      } else {
+        await axios.post(`${API}/projects`, form, { headers });
+        toast.success("Project added.");
+      }
+      setForm({ title: "", description: "", status: "Planning", icon: "📁" });
+      fetchProjects();
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not save the project. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEdit = (p) => {
     setEditId(p.id);
     setForm({ title: p.title, description: p.description, status: p.status, icon: p.icon });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this project?")) return;
-    await axios.delete(`${API}/projects/${id}`, { headers });
-    fetchProjects();
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    try {
+      await axios.delete(`${API}/projects/${deleteTarget}`, { headers });
+      toast.success("Project deleted.");
+      fetchProjects();
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not delete the project. Please try again.");
+    } finally {
+      setDeleteTarget(null);
+    }
   };
 
   const handleCancel = () => {
@@ -58,84 +92,116 @@ const Projects = () => {
   };
 
   return (
-    <div style={styles.page}>
+    <div>
+      <PageHeader title="Projects" sub="Manage your projects" />
 
-      <h1 style={styles.heading}>Projects</h1>
-      <p style={styles.sub}>Manage your projects</p>
-
-      <div style={styles.formCard}>
-        <h3 style={styles.formTitle}>{editId ? "✏️ Edit Project" : "➕ Add Project"}</h3>
-        <div style={styles.formRow}>
-          <input placeholder="Title *" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} style={styles.input} />
-          <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} style={styles.input}>
+      <Card className="mb-8 p-6">
+        <h3 className="mb-4 font-display text-base font-bold text-text">{editId ? "Edit Project" : "Add Project"}</h3>
+        <div className="mb-3 flex flex-wrap gap-3">
+          <Input
+            placeholder="Title *"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            className="min-w-[180px] flex-[2]"
+          />
+          <Select
+            value={form.status}
+            onChange={(e) => setForm({ ...form, status: e.target.value })}
+            className="min-w-[150px] flex-1"
+          >
             <option>Planning</option>
             <option>In Progress</option>
             <option>Live</option>
-          </select>
-          <input placeholder="Icon 📁" value={form.icon} onChange={e => setForm({ ...form, icon: e.target.value })} style={{ ...styles.input, maxWidth: "80px" }} />
+          </Select>
+          <Input
+            placeholder="📁"
+            value={form.icon}
+            onChange={(e) => setForm({ ...form, icon: e.target.value })}
+            className="w-[76px] shrink-0"
+          />
         </div>
-        <textarea placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} style={styles.textarea} />
-        <div style={{ display: "flex", gap: "10px" }}>
-          <button onClick={handleSubmit} style={styles.addBtn} disabled={loading}>
+        <Textarea
+          placeholder="Description"
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          className="mb-3"
+        />
+        <div className="flex gap-2.5">
+          <Button onClick={handleSubmit} disabled={loading}>
             {loading ? "Saving..." : editId ? "✓ Update" : "+ Add"}
-          </button>
-          {editId && <button onClick={handleCancel} style={styles.cancelBtn}>Cancel</button>}
+          </Button>
+          {editId && (
+            <Button variant="ghost" onClick={handleCancel}>
+              Cancel
+            </Button>
+          )}
         </div>
-      </div>
+      </Card>
 
-      {projects.length === 0 ? (
-        <p style={{ color: "#6b7280" }}>No projects yet. Add one above!</p>
-      ) : (
-        <div style={styles.grid}>
-          {projects.map((p) => (
-            <div key={p.id} style={styles.card}>
-              <div style={styles.top}>
-                <span style={styles.icon}>{p.icon}</span>
-                <span style={{
-                  ...styles.badge,
-                  color: statusColors[p.status] || "#6b7280",
-                  border: `1px solid ${statusColors[p.status] || "#6b7280"}40`,
-                  background: `${statusColors[p.status] || "#6b7280"}15`
-                }}>
-                  {p.status}
-                </span>
-              </div>
-              <h3 style={styles.title}>{p.title}</h3>
-              <p style={styles.desc}>{p.description}</p>
-              <div style={styles.cardBottom}>
-                <button onClick={() => handleEdit(p)} style={styles.editBtn}>✏️ Edit</button>
-                <button onClick={() => handleDelete(p.id)} style={styles.deleteBtn}>🗑 Delete</button>
-              </div>
-            </div>
+      {initialLoading ? (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <Card key={i} className="flex flex-col gap-3 p-6">
+              <Skeleton width={30} height={30} radius={8} />
+              <Skeleton width="60%" height={18} />
+              <Skeleton width="100%" height={13} />
+              <Skeleton width="85%" height={13} />
+            </Card>
           ))}
         </div>
+      ) : projects.length === 0 ? (
+        <EmptyState
+          icon="📁"
+          title="No projects yet"
+          sub="Add your first project above and it will show up here for you to manage."
+        />
+      ) : (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((p) => {
+            const color = statusColors[p.status] || "#a1a1aa";
+            return (
+              <div key={p.id} className="flex flex-col gap-2.5 rounded-lg border border-line bg-surface p-6 transition-shadow duration-200 hover:shadow-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-[30px]">{p.icon}</span>
+                  <span
+                    className="rounded-full px-3 py-0.5 text-[11px] font-bold"
+                    style={{ color, background: `${color}16`, border: `1px solid ${color}40` }}
+                  >
+                    {p.status}
+                  </span>
+                </div>
+                <h3 className="m-0 font-display text-[16.5px] font-bold text-text">{p.title}</h3>
+                <p className="m-0 flex-1 text-[13px] leading-relaxed text-text-2">{p.description}</p>
+                <div className="mt-auto flex gap-2">
+                  <button
+                    onClick={() => handleEdit(p)}
+                    className="flex-1 cursor-pointer rounded-sm border border-line-strong bg-surface-2 px-2.5 py-1.5 text-[12.5px] text-text-2 transition-colors duration-200 hover:bg-surface-3"
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    onClick={() => setDeleteTarget(p.id)}
+                    className="flex-1 cursor-pointer rounded-sm border border-danger/30 bg-danger/10 px-2.5 py-1.5 text-[12.5px] text-danger transition-colors duration-200 hover:bg-danger/15"
+                  >
+                    🗑 Delete
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete project?"
+        message="This action cannot be undone. The project will be permanently removed."
+        confirmLabel="Delete"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
-};
-
-const styles = {
-  page: { padding: "40px", background: "#1B1464", minHeight: "100vh" },
-  heading: { color: "#fff", fontSize: "28px", fontWeight: "800", margin: "0 0 4px" },
-  sub: { color: "#6b7280", fontSize: "14px", marginBottom: "24px" },
-  formCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "20px", marginBottom: "32px", display: "flex", flexDirection: "column", gap: "12px" },
-  formTitle: { color: "#fff", fontSize: "15px", fontWeight: "700", margin: 0 },
-  formRow: { display: "flex", gap: "12px", flexWrap: "wrap" },
-  input: { background: "#0d0f14", border: "1px solid #1e2130", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none", flex: 1 },
-  textarea: { background: "#0d0f14", border: "1px solid #1e2130", borderRadius: "8px", padding: "10px 14px", color: "#fff", fontSize: "14px", outline: "none", resize: "vertical", minHeight: "80px" },
-  addBtn: { background: "#7c3aed", border: "none", borderRadius: "8px", padding: "10px 24px", color: "#fff", fontSize: "14px", fontWeight: "700", cursor: "pointer" },
-  cancelBtn: { background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "10px 20px", color: "#9ca3af", fontSize: "14px", cursor: "pointer" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "20px" },
-  card: { background: "#161824", border: "1px solid #1e2130", borderRadius: "16px", padding: "24px", display: "flex", flexDirection: "column", gap: "10px" },
-  top: { display: "flex", justifyContent: "space-between", alignItems: "center" },
-  icon: { fontSize: "32px" },
-  title: { color: "#fff", fontSize: "16px", fontWeight: "700", margin: 0 },
-  desc: { color: "#6b7280", fontSize: "13px", margin: 0, flex: 1 },
-  badge: { fontSize: "11px", fontWeight: "700", padding: "3px 10px", borderRadius: "20px" },
-  cardBottom: { display: "flex", gap: "8px", marginTop: "auto" },
-  editBtn: { flex: 1, background: "transparent", border: "1px solid #374151", borderRadius: "8px", padding: "6px 10px", color: "#d1d5db", fontSize: "12px", cursor: "pointer" },
-  deleteBtn: { flex: 1, background: "transparent", border: "1px solid #7f1d1d", borderRadius: "8px", padding: "6px 10px", color: "#ef4444", fontSize: "12px", cursor: "pointer" },
-
 };
 
 export default Projects;

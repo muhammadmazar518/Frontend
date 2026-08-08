@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { PageHeader, Badge, Button } from "../components/ui";
+import { useToast } from "../components/Toast";
 
 const plans = {
   monthly: [
@@ -7,7 +9,6 @@ const plans = {
       name: "Free",
       price: "$0",
       period: "/month",
-      color: "#38bdf8",
       icon: "🆓",
       desc: "Perfect for individuals getting started.",
       highlight: false,
@@ -29,7 +30,6 @@ const plans = {
       name: "Professional",
       price: "$19",
       period: "/month",
-      color: "#7c3aed",
       icon: "⚡",
       desc: "For growing teams and professionals.",
       highlight: true,
@@ -51,7 +51,6 @@ const plans = {
       name: "Business",
       price: "$49",
       period: "/month",
-      color: "#f59e0b",
       icon: "🏢",
       desc: "For large teams and enterprises.",
       highlight: false,
@@ -75,7 +74,6 @@ const plans = {
       name: "Free",
       price: "$0",
       period: "/year",
-      color: "#38bdf8",
       icon: "🆓",
       desc: "Perfect for individuals getting started.",
       highlight: false,
@@ -97,7 +95,6 @@ const plans = {
       name: "Professional",
       price: "$99",
       period: "/year",
-      color: "#7c3aed",
       icon: "⚡",
       desc: "For growing teams and professionals.",
       highlight: true,
@@ -120,7 +117,6 @@ const plans = {
       name: "Business",
       price: "$249",
       period: "/year",
-      color: "#f59e0b",
       icon: "🏢",
       desc: "For large teams and enterprises.",
       highlight: false,
@@ -144,19 +140,19 @@ const plans = {
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const [billing, setBilling] = useState("monthly");
   const [loadingPlan, setLoadingPlan] = useState(null);
-  const [userPlan, setUserPlan] = useState("Free"); 
+  const [userPlan, setUserPlan] = useState("Free");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
     fetch(`${import.meta.env.VITE_API_URL}/user/profile`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log("USER DATA:", data);
+      .then((res) => res.json())
+      .then((data) => {
         if (data.is_pro || data.has_purchased) {
           setUserPlan("Professional");
         } else {
@@ -183,116 +179,117 @@ const Pricing = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           planName: planIdentifier,
           amount: numericAmount,
-          billingPeriod: billing
+          billingPeriod: billing,
         }),
       });
 
       const data = await response.json();
 
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       } else {
-        alert("Payment initialization failed.");
+        toast.error("Payment initialization failed.", { title: "Checkout unavailable" });
         setLoadingPlan(null);
       }
     } catch (error) {
       console.error("Stripe Redirect Error:", error);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.", { title: "Checkout failed" });
       setLoadingPlan(null);
     }
   };
 
-  return (
-    <div style={styles.page}>
-      <h1 style={styles.heading}>Pricing Plans</h1>
-      <p style={styles.sub}>Choose the plan that works best for you and your team.</p>
+  const faqs = [
+    { q: "Can I upgrade anytime?", a: "Yes, you can upgrade or downgrade your plan at any time." },
+    { q: "Is there a free trial?", a: "Professional plan comes with a 14-day free trial, no credit card required." },
+    { q: "What payment methods?", a: "We accept all major credit cards, PayPal, and bank transfers." },
+    { q: "Can I cancel anytime?", a: "Yes, you can cancel your subscription at any time with no penalties." },
+  ];
 
-      <div style={styles.toggleWrap}>
+  return (
+    <div>
+      <PageHeader
+        title="Pricing Plans"
+        sub="Choose the plan that works best for you and your team"
+      />
+
+      <div className="mb-9 flex w-fit gap-1 rounded-md border border-line bg-surface p-1">
         <button
           onClick={() => setBilling("monthly")}
-          style={{
-            ...styles.toggleBtn,
-            background: billing === "monthly" ? "#7c3aed" : "transparent",
-            color: billing === "monthly" ? "#fff" : "#6b7280",
-          }}
+          className={`cursor-pointer rounded-sm border-none px-5 py-2 text-sm font-semibold transition-colors duration-150 ${
+            billing === "monthly" ? "bg-primary text-black shadow-sm" : "text-text-2 hover:text-text"
+          }`}
         >
           Monthly
         </button>
         <button
           onClick={() => setBilling("yearly")}
-          style={{
-            ...styles.toggleBtn,
-            background: billing === "yearly" ? "#7c3aed" : "transparent",
-            color: billing === "yearly" ? "#fff" : "#6b7280",
-          }}
+          className={`flex cursor-pointer items-center gap-2 rounded-sm border-none px-5 py-2 text-sm font-semibold transition-colors duration-150 ${
+            billing === "yearly" ? "bg-primary text-black shadow-sm" : "text-text-2 hover:text-text"
+          }`}
         >
           Yearly
-          <span style={styles.saveBadge}>Save up to 58%</span>
+          <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-bold text-success">Save up to 58%</span>
         </button>
       </div>
 
-      <div style={styles.grid}>
+      <div className="mb-12 grid items-stretch gap-6 md:grid-cols-3">
         {currentPlans.map((plan) => (
           <div
             key={plan.name}
-            style={{
-              ...styles.card,
-              border: plan.highlight ? `2px solid ${plan.color}` : "1px solid #1e2130",
-              transform: plan.highlight ? "scale(1.03)" : "scale(1)",
-            }}
+            className={`relative flex flex-col gap-4.5 rounded-xl bg-surface p-7 ${
+              plan.highlight ? "border border-primary/60 shadow-lg" : "border border-line shadow-sm"
+            }`}
           >
             {plan.highlight && (
-              <div style={{ ...styles.popularBadge, background: plan.color }}>
-                Most Popular
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-line-strong bg-primary px-4 py-1.5 text-xs font-bold text-black shadow-md">
+                ★ Most Popular
               </div>
             )}
-
             {plan.badge && (
-              <div style={styles.yearSaveBadge}>{plan.badge}</div>
+              <Badge color="#34d399" className="absolute right-4 top-4">{plan.badge}</Badge>
             )}
 
-            <div style={styles.cardHeader}>
-              <span style={styles.planIcon}>{plan.icon}</span>
+            <div className="flex items-start gap-3">
+              <span className="shrink-0 text-[30px]">{plan.icon}</span>
               <div>
-                <h3 style={styles.planName}>{plan.name}</h3>
-                <p style={styles.planDesc}>{plan.desc}</p>
+                <h3 className="m-0 mb-1 font-display text-[19px] font-bold text-text">{plan.name}</h3>
+                <p className="m-0 text-[12.5px] leading-relaxed text-text-3">{plan.desc}</p>
               </div>
             </div>
 
-            <div style={styles.priceRow}>
-              <span style={{ ...styles.price, color: plan.color }}>{plan.price}</span>
-              <span style={styles.period}>{plan.period}</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className={`font-display text-[42px] font-extrabold tracking-tight ${plan.highlight ? "text-primary" : "text-text"}`}>
+                {plan.price}
+              </span>
+              <span className="text-sm text-text-3">{plan.period}</span>
             </div>
 
-            <div style={styles.divider} />
+            <div className="h-px bg-line" />
 
-            <ul style={styles.featureList}>
+            <ul className="m-0 flex flex-1 list-none flex-col gap-2.5 p-0">
               {plan.features.map((f) => (
-                <li key={f.text} style={styles.featureItem}>
-                  <span style={{ ...styles.featureIcon, color: f.included ? "#34d399" : "#374151" }}>
+                <li key={f.text} className="flex items-center gap-2.5 text-[13.5px]">
+                  <span className={`w-4 shrink-0 text-[13px] font-bold ${f.included ? "text-success" : "text-text-3"}`}>
                     {f.included ? "✓" : "✕"}
                   </span>
-                  <span style={{ ...styles.featureText, color: f.included ? "#d1d5db" : "#4b5563" }}>
-                    {f.text}
-                  </span>
+                  <span className={f.included ? "text-text-2" : "text-text-3"}>{f.text}</span>
                 </li>
               ))}
             </ul>
 
-            <button
+            <Button
+              className="mt-2 w-full"
               onClick={() => handleCheckout(plan)}
               disabled={loadingPlan !== null || userPlan === plan.name}
               style={{
-                ...styles.ctaBtn,
-                background: userPlan === plan.name ? "#22c55e" : plan.highlight ? plan.color : "transparent",
-                color: "#fff",
-                border: userPlan === plan.name ? "1px solid #22c55e" : `1px solid ${plan.color}`,
-                opacity: loadingPlan && loadingPlan !== plan.name ? 0.5 : 1,
+                background: userPlan === plan.name ? "rgba(212,175,55,0.12)" : plan.highlight ? "#d4af37" : "transparent",
+                color: userPlan === plan.name ? "#d4af37" : plan.highlight ? "#050505" : "#e5e5e5",
+                border: userPlan === plan.name ? "1px solid rgba(212,175,55,0.4)" : plan.highlight ? "1px solid #d4af37" : "1px solid #3a3a3a",
                 cursor: userPlan === plan.name ? "default" : "pointer",
               }}
             >
@@ -301,61 +298,22 @@ const Pricing = () => {
                 : userPlan === plan.name
                 ? "✓ Current Plan"
                 : plan.cta}
-            </button>
+            </Button>
           </div>
         ))}
       </div>
 
-      <div style={styles.faqSection}>
-        <h2 style={styles.faqTitle}>Frequently Asked Questions</h2>
-        <div style={styles.faqGrid}>
-          {[
-            { q: "Can I upgrade anytime?", a: "Yes, you can upgrade or downgrade your plan at any time." },
-            { q: "Is there a free trial?", a: "Professional plan comes with a 14-day free trial, no credit card required." },
-            { q: "What payment methods?", a: "We accept all major credit cards, PayPal, and bank transfers." },
-            { q: "Can I cancel anytime?", a: "Yes, you can cancel your subscription at any time with no penalties." },
-          ].map((item) => (
-            <div key={item.q} style={styles.faqCard}>
-              <h4 style={styles.faqQ}>{item.q}</h4>
-              <p style={styles.faqA}>{item.a}</p>
-            </div>
-          ))}
-        </div>
+      <h2 className="mb-5 font-display text-xl font-bold text-text">Frequently Asked Questions</h2>
+      <div className="grid gap-4 md:grid-cols-2">
+        {faqs.map((item) => (
+          <div key={item.q} className="rounded-md border border-line bg-surface p-5">
+            <h4 className="m-0 mb-2 text-[14.5px] font-semibold text-text">{item.q}</h4>
+            <p className="m-0 text-[13px] leading-relaxed text-text-3">{item.a}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
-};
-
-const styles = {
-  page: { padding: "40px", background: "#1B1464", minHeight: "100vh" },
-  heading: { color: "#fff", fontSize: "30px", fontWeight: "800", margin: "0 0 5px", letterSpacing: "-0.5px" },
-  sub: { color: "#9ca3af", fontSize: "14px", marginBottom: "28px" },
-  toggleWrap: { display: "flex", background: "#161824", border: "1px solid #1e2130", borderRadius: "12px", padding: "4px", width: "fit-content", marginBottom: "36px", gap: "4px" },
-  toggleBtn: { padding: "8px 20px", borderRadius: "8px", border: "none", fontSize: "14px", fontWeight: "600", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", transition: "all 0.2s" },
-  saveBadge: { background: "#052e16", color: "#34d399", fontSize: "10px", fontWeight: "700", padding: "2px 8px", borderRadius: "20px" },
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px", marginBottom: "40px", alignItems: "start" },
-  card: { background: "#161824", borderRadius: "20px", padding: "28px", position: "relative", display: "flex", flexDirection: "column", gap: "16px", transition: "transform 0.2s" },
-  popularBadge: { position: "absolute", top: "-14px", left: "50%", transform: "translateX(-50%)", color: "#fff", fontSize: "11px", fontWeight: "700", padding: "4px 16px", borderRadius: "20px", whiteSpace: "nowrap" },
-  yearSaveBadge: { position: "absolute", top: "16px", right: "16px", background: "#052e16", color: "#34d399", fontSize: "10px", fontWeight: "700", padding: "3px 10px", borderRadius: "20px", border: "1px solid #166534" },
-  cardHeader: { display: "flex", alignItems: "flex-start", gap: "12px" },
-  planIcon: { fontSize: "28px", flexShrink: 0 },
-  planName: { color: "#fff", fontSize: "18px", fontWeight: "700", margin: "0 0 4px" },
-  planDesc: { color: "#6b7280", fontSize: "12px", margin: 0, lineHeight: "1.5" },
-  priceRow: { display: "flex", alignItems: "baseline", gap: "6px" },
-  price: { fontSize: "40px", fontWeight: "800", letterSpacing: "-1px" },
-  period: { color: "#6b7280", fontSize: "14px" },
-  divider: { height: "1px", background: "#1e2130" },
-  featureList: { listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" },
-  featureItem: { display: "flex", alignItems: "center", gap: "10px" },
-  featureIcon: { fontSize: "13px", fontWeight: "700", width: "16px", flexShrink: 0 },
-  featureText: { fontSize: "13px" },
-  ctaBtn: { width: "100%", padding: "13px", borderRadius: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", marginTop: "8px", transition: "all 0.2s" },
-  faqSection: { marginTop: "16px" },
-  faqTitle: { color: "#fff", fontSize: "20px", fontWeight: "700", marginBottom: "20px" },
-  faqGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" },
-  faqCard: { background: "#161824", border: "1px solid #1e2130", borderRadius: "12px", padding: "20px" },
-  faqQ: { color: "#fff", fontSize: "14px", fontWeight: "600", margin: "0 0 8px" },
-  faqA: { color: "#6b7280", fontSize: "13px", margin: 0, lineHeight: "1.6" },
 };
 
 export default Pricing;

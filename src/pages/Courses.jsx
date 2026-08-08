@@ -1,21 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import { PageHeader, Card, Button, ErrorBox, Skeleton, EmptyState } from "../components/ui";
 
 const getLevelColor = (level) => {
   switch (level?.toLowerCase()) {
     case "beginner":
-      return { bg: "#10b98120", text: "#10b981" };
+      return { bg: "rgba(52,211,153,0.14)", text: "#34d399", border: "rgba(52,211,153,0.3)" };
     case "intermediate":
-      return { bg: "#3b82f620", text: "#3b82f6" };
+      return { bg: "rgba(96,165,250,0.14)", text: "#60a5fa", border: "rgba(96,165,250,0.3)" };
     case "advanced":
-      return { bg: "#ef444420", text: "#ef4444" };
+      return { bg: "rgba(248,113,113,0.14)", text: "#f87171", border: "rgba(248,113,113,0.3)" };
     default:
-      return { bg: "#6b728020", text: "#6b7280" };
+      return { bg: "rgba(161,161,170,0.14)", text: "#a1a1aa", border: "rgba(161,161,170,0.3)" };
   }
 };
 
-export default function Courses({ onNavigate }) {
+export default function Courses() {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [activeCourse, setActiveCourse] = useState(null);
@@ -47,47 +48,58 @@ export default function Courses({ onNavigate }) {
 
   if (loading) {
     return (
-      <div style={styles.loadingWrap}>
-        <div style={styles.spinner}>⏳</div>
-        <p style={styles.loadingText}>Fetching premium courses from PostgreSQL...</p>
+      <div className="py-2">
+        <Skeleton height={34} width="42%" className="mb-6" />
+        <div className="flex flex-col gap-3">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center gap-4 p-4.5">
+              <Skeleton width={52} height={52} radius={14} />
+              <div className="flex-1">
+                <Skeleton width="55%" height={16} />
+                <Skeleton width="35%" height={12} className="mt-2" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
 
   if (error) {
-    return (
-      <div style={styles.errorBox}>
-        <strong>⚠️ Error:</strong> {error}
-      </div>
-    );
+    return <ErrorBox className="mx-auto max-w-[640px]">⚠️ {error}</ErrorBox>;
   }
 
   return (
-    <div style={styles.pageWrapper}>
-      <div style={styles.mainLayout}>
-        
-        <div style={{ ...styles.listColumn, flex: activeCourse ? "0 0 360px" : 1 }}>
-          <div style={styles.headerRow}>
-            <h2 style={styles.heading}>Courses</h2>
-            
-            <div style={styles.filterTabsWrap}>
-              {["All", "Beginner", "Intermediate", "Advanced"].map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLevelFilter(l)}
-                  style={{
-                    ...styles.filterBtn,
-                    background: levelFilter === l ? "#6366f1" : "transparent",
-                    color: levelFilter === l ? "#fff" : "#64748b",
-                  }}
-                >{l}</button>
-              ))}
-            </div>
+    <div>
+      <PageHeader
+        title="Courses"
+        sub="Browse structured tracks and unlock Pro content"
+        actions={
+          <div className="flex flex-wrap gap-1.5 rounded-full border border-line bg-surface p-1">
+            {["All", "Beginner", "Intermediate", "Advanced"].map((l) => (
+              <button
+                key={l}
+                onClick={() => setLevelFilter(l)}
+                className={`cursor-pointer rounded-full px-4 py-1.5 text-[12.5px] font-semibold transition-colors duration-150 ${
+                  levelFilter === l ? "bg-primary text-black shadow-sm" : "text-text-2 hover:text-text"
+                }`}
+              >
+                {l}
+              </button>
+            ))}
           </div>
+        }
+      />
 
-          <div style={styles.coursesGrid}>
+      <div className={`grid items-start gap-6 ${activeCourse ? "lg:grid-cols-[minmax(0,1.4fr)_minmax(300px,1fr)]" : ""}`}>
+        <div className="min-w-0">
+          <div className="flex flex-col gap-3">
             {filtered.length === 0 ? (
-              <p style={styles.emptyText}>Is category mein abhi koi course nahi hai.</p>
+              <EmptyState
+                icon="🎓"
+                title="Nothing in this category"
+                sub="No courses match this level yet. Try a different filter."
+              />
             ) : (
               filtered.map((c) => {
                 const lc = getLevelColor(c.level);
@@ -96,27 +108,28 @@ export default function Courses({ onNavigate }) {
                   <div
                     key={c.id}
                     onClick={() => setActiveCourse(active ? null : c)}
-                    style={{
-                      ...styles.courseCard,
-                      background: active ? "#1e1b4b" : "#0f111a",
-                      borderColor: active ? "#6366f1" : "#1e293b",
-                    }}
+                    className={`flex cursor-pointer items-center gap-4 rounded-md border p-[18px] transition-colors duration-200 ${
+                      active ? "border-primary/50 bg-primary-soft/70" : "border-line bg-surface hover:border-line-strong"
+                    }`}
                   >
-                    <span style={styles.cardIcon}>
+                    <span className="flex-shrink-0 rounded-md border border-line bg-surface-2 p-2.5 text-[28px] leading-none">
                       {c.icon || "🎓"}
                     </span>
-                    <div style={styles.cardMainInfo}>
-                      <p style={styles.cardTitle}>{c.title}</p>
-                      <div style={styles.cardBadgesRow}>
-                        <span style={{ ...styles.levelBadge, background: lc.bg, color: lc.text }}>
+                    <div className="min-w-0 flex-1">
+                      <p className="m-0 mb-2 truncate font-display text-[15.5px] font-bold text-text">{c.title}</p>
+                      <div className="flex flex-wrap gap-2.5 text-[11.5px] font-semibold">
+                        <span
+                          className="rounded-full px-2.5 py-0.5"
+                          style={{ background: lc.bg, color: lc.text, border: `1px solid ${lc.border}` }}
+                        >
                           {c.level}
                         </span>
-                        <span style={styles.metaText}>⏱ {c.duration}</span>
-                        <span style={styles.ratingText}>★ {c.rating}</span>
+                        <span className="text-text-3">⏱ {c.duration}</span>
+                        <span className="text-warning">★ {c.rating}</span>
                       </div>
                     </div>
-                    <span style={{ ...styles.arrowIndicator, color: active ? "#6366f1" : "#475569" }}>
-                      {active ? "▼" : "▶"}
+                    <span className={`text-xs ${active ? "text-primary" : "text-text-3"}`}>
+                      {active ? "✕" : "→"}
                     </span>
                   </div>
                 );
@@ -126,313 +139,51 @@ export default function Courses({ onNavigate }) {
         </div>
 
         {activeCourse && (
-          <div style={styles.detailsSidebar}>
-            <button
-              onClick={() => setActiveCourse(null)}
-              style={styles.closeSidebarBtn}
-            >✕</button>
-
-            <div style={styles.sidebarLargeIcon}>{activeCourse.icon || "🎓"}</div>
-            
-            <span style={{
-              ...styles.sidebarLevelBadge,
-              background: getLevelColor(activeCourse.level).bg,
-              color: getLevelColor(activeCourse.level).text,
-            }}>{activeCourse.level}</span>
-
-            <h2 style={styles.sidebarTitle}>{activeCourse.title}</h2>
-            <p style={styles.sidebarDesc}>
+          <Card className="sticky top-6 animate-fade-up p-6 shadow-lg sm:p-8">
+            <div className="mb-4 text-[52px] leading-none">{activeCourse.icon || "🎓"}</div>
+            <span
+              className="mb-4 inline-block rounded-full px-3 py-1 text-[11px] font-bold"
+              style={{
+                background: getLevelColor(activeCourse.level).bg,
+                color: getLevelColor(activeCourse.level).text,
+                border: `1px solid ${getLevelColor(activeCourse.level).border}`,
+              }}
+            >
+              {activeCourse.level}
+            </span>
+            <h2 className="m-0 mb-3 font-display text-2xl font-extrabold leading-snug text-text">
+              {activeCourse.title}
+            </h2>
+            <p className="mb-5 text-sm leading-relaxed text-text-2">
               {activeCourse.description || activeCourse.desc}
             </p>
-            
-            <div style={styles.sidebarStatsBar}>
-              <span>⏱ <strong>{activeCourse.duration}</strong></span>
-              <span>📹 <strong>{activeCourse.lessons || 0} lessons</strong></span>
-              <span style={{ color: "#f59e0b" }}>★ <strong>{activeCourse.rating}</strong></span>
+
+            <div className="mb-6 flex flex-wrap gap-6 border-y border-line py-3.5 text-[13px] text-text-3">
+              <span>⏱ <strong className="font-semibold text-text-2">{activeCourse.duration}</strong></span>
+              <span>📹 <strong className="font-semibold text-text-2">{activeCourse.lessons || 0} lessons</strong></span>
+              <span className="text-warning">★ <strong className="font-semibold">{activeCourse.rating}</strong></span>
             </div>
 
-            <p style={styles.curriculumHeading}>What you will learn</p>
-            
-            <ul style={styles.topicsList}>
-              {Array.isArray(activeCourse.topics) ? activeCourse.topics.map((t, i) => (
-                <li key={i} style={styles.topicItem}>{t}</li>
-              )) : <li style={styles.topicItem}>Full course curriculum included.</li>}
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-wider text-primary">
+              What you will learn
+            </p>
+            <ul className="mb-6 flex flex-col gap-1.5 pl-5">
+              {Array.isArray(activeCourse.topics) ? (
+                activeCourse.topics.map((t, i) => <li key={i} className="text-[13px] text-text-2">{t}</li>)
+              ) : (
+                <li className="text-[13px] text-text-2">Full course curriculum included.</li>
+              )}
             </ul>
 
-            <button
+            <Button
+              size="lg"
               onClick={() => navigate(`/purchase-success?course=${encodeURIComponent(activeCourse.title)}`)}
-              style={styles.buyBtn}
-              onMouseEnter={(e) => { e.target.style.background = "#4f46e5"; }}
-              onMouseLeave={(e) => { e.target.style.background = "#6366f1"; }}
             >
               Buy Course — Unlock Pro Features
-            </button>
-          </div>
+            </Button>
+          </Card>
         )}
       </div>
     </div>
   );
 }
-
-const styles = {
-
-  page: {
-    padding: "40px",
-    background: "#1B1464",
-    minHeight: "100vh",
-  },
-
-  pageWrapper: { 
-      display: "flex", 
-      flexDirection: "column", 
-      width: "100%", 
-      gap: "1rem" 
-  },
-  
-  
-  mainLayout: { 
-      display: "flex", 
-      gap: "1.5rem", 
-      minHeight: "80vh" 
-  },
-  
-  listColumn: { 
-      transition: "all 0.3s ease" 
-  },
-  
-  headerRow: { 
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "space-between", 
-      marginBottom: "1.5rem", 
-      flexWrap: "wrap", 
-      gap: 12 
-  },
-  
-  heading: { 
-      fontSize: "24px", 
-      fontWeight: 800, 
-      color: "#fff", 
-      letterSpacing: "-0.02em", 
-      margin: 0 
-  },
-  
-  filterTabsWrap: { 
-      display: "flex", 
-      gap: 6, 
-      background: "#111322", 
-      padding: "4px", 
-      borderRadius: "24px" 
-  },
-  
-  filterBtn: { 
-      padding: "6px 14px", 
-      borderRadius: 20, 
-      fontSize: 12, 
-      fontWeight: 600, 
-      border: "none", 
-      cursor: "pointer", 
-      transition: "all 0.2s" 
-  },
-  
-  coursesGrid: { 
-      display: "flex", 
-      flexDirection: "column", 
-      gap: 12 
-  },
-  
-  emptyText: { 
-      color: "#000", 
-      textAlign: "center", 
-      padding: "2rem" 
-  },
-  
-  courseCard: { 
-      border: "1px solid #1e293b", 
-      borderRadius: 14, 
-      padding: "1.25rem", 
-      cursor: "pointer", 
-      display: "flex", 
-      alignItems: "center", 
-      gap: 16, 
-      transition: "all 0.2s" 
-  },
-  
-  cardIcon: { 
-      fontSize: 28, 
-      flexShrink: 0, 
-      background: "#1e293b", 
-      padding: "8px", 
-      borderRadius: "10px" 
-  },
-  
-  cardMainInfo: { 
-      flex: 1, 
-      minWidth: 0 
-  },
-  
-  cardTitle: { 
-      fontSize: 15, 
-      fontWeight: 700, 
-      color: "#f1f5f9", 
-      marginBottom: 6, 
-      whiteSpace: "nowrap", 
-      overflow: "hidden", 
-      textOverflow: "ellipsis", 
-      margin: 0 
-  },
-  
-  cardBadgesRow: { 
-      display: "flex", 
-      gap: 10, 
-      fontSize: 11, 
-      fontWeight: 600 
-  },
-  
-  levelBadge: { 
-      padding: "2px 8px", 
-      borderRadius: "12px" 
-  },
-  
-  metaText: { 
-      color: "#94a3b8" 
-  },
-  
-  ratingText: { 
-      color: "#f59e0b" 
-  },
-  
-  arrowIndicator: { 
-      fontSize: 12 
-  },
-  
-  detailsSidebar: { 
-      flex: 1, 
-      background: "#0f111a", 
-      border: "1px solid #1e293b", 
-      borderRadius: 16, 
-      padding: "2rem", 
-      alignSelf: "flex-start", 
-      position: "sticky", 
-      top: 30, 
-      boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.5)" 
-  },
-  
-  closeSidebarBtn: { 
-      float: "right", 
-      background: "#1e293b", 
-      border: "none", 
-      color: "#94a3b8", 
-      width: 28, 
-      height: 28, 
-      borderRadius: "50%", 
-      fontSize: 14, 
-      cursor: "pointer", 
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center" 
-  },
-  
-  sidebarLargeIcon: { 
-      fontSize: 48, 
-      marginBottom: "1rem" 
-  },
-  
-  sidebarLevelBadge: { 
-      fontSize: 11, 
-      fontWeight: 700, 
-      padding: "4px 12px", 
-      borderRadius: "12px", 
-      display: "inline-block", 
-      marginBottom: "1rem" 
-  },
-  
-  sidebarTitle: { 
-      fontSize: 24, 
-      fontWeight: 800, 
-      color: "#fff", 
-      margin: "0 0 1rem", 
-      lineHeight: 1.3 
-  },
-  
-  sidebarDesc: { 
-      fontSize: 14, 
-      color: "#94a3b8", 
-      lineHeight: 1.6, 
-      marginBottom: "1.5rem" 
-  },
-  
-  sidebarStatsBar: { 
-      display: "flex", 
-      gap: "1.5rem", 
-      fontSize: 13, 
-      color: "#64748b", 
-      marginBottom: "2rem", 
-      borderTop: "1px solid #1e293b", 
-      borderBottom: "1px solid #1e293b", 
-      padding: "12px 0" 
-  },
-  
-  curriculumHeading: { 
-      fontSize: 11, 
-      color: "#6366f1", 
-      textTransform: "uppercase", 
-      fontWeight: 700, 
-      letterSpacing: "0.05em", 
-      marginBottom: "0.75rem" 
-  },
-  
-  topicsList: { 
-      paddingLeft: "1.25rem", 
-      display: "flex", 
-      flexDirection: "column", 
-      gap: 6, 
-      marginBottom: "2rem" 
-  },
-  
-  topicItem: { 
-      fontSize: 13, 
-      color: "#94a3b8" 
-  },
-  
-  buyBtn: { 
-      width: "100%", 
-      padding: "14px", 
-      background: "#6366f1", 
-      color: "#fff", 
-      border: "none", 
-      borderRadius: 12, 
-      fontSize: 15, 
-      fontWeight: 700, 
-      cursor: "pointer", 
-      boxShadow: "0 4px 14px 0 rgba(99, 102, 241, 0.4)", 
-      transition: "transform 0.1s" 
-  },
-
-  loadingWrap: { 
-      color: "#a5b4fc", 
-      padding: "3rem", 
-      textAlign: "center", 
-      fontSize: "16px" 
-  },
-  
-  spinner: { 
-      marginBottom: "1rem", 
-      fontSize: "24px" 
-  },
-  
-  loadingText: { 
-      color: "#000", 
-      fontSize: "14px", 
-      margin: 0 
-  },
-  
-  errorBox: { 
-      background: "#ef444415", 
-      border: "1px solid #ef4444", 
-      padding: "1.5rem", 
-      borderRadius: "12px", 
-      color: "#f87171", 
-      margin: "2rem" 
-  }
-};

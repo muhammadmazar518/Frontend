@@ -1,6 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signupUser } from "../api";
+import { Logo, Input, Field, Button, ErrorBox } from "../components/ui";
+
+const GoogleIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" className="shrink-0">
+    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" />
+    <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
+    <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" />
+    <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" />
+  </svg>
+);
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -44,199 +54,91 @@ const Signup = () => {
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Create account</h1>
-        <p style={styles.subtitle}>Get started for free</p>
+    <div className="app-bg relative flex min-h-screen items-center justify-center p-6">
+      <div className="auth-glow" />
 
-        {error && <div style={styles.error}>{error}</div>}
+      <div className="relative w-full max-w-[460px] animate-fade-up rounded-xl border border-line bg-surface p-7 shadow-lg sm:p-11">
+        <div className="mb-8 flex justify-center">
+          <Logo />
+        </div>
 
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.field}>
-            <label style={styles.label}>Full Name</label>
-            <input
+        <h1 className="m-0 text-center font-display text-[26px] font-extrabold tracking-tight text-text">
+          Create your account
+        </h1>
+        <p className="mt-2 mb-7 text-center text-sm text-text-2">Get started free — upgrade anytime</p>
+
+        {error && <ErrorBox>{error}</ErrorBox>}
+
+        <button
+          onClick={handleGoogleLogin}
+          className="mb-2 flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-sm border border-line-strong bg-surface px-4 py-3 text-sm font-semibold text-text transition-colors duration-200 hover:bg-surface-2"
+        >
+          <GoogleIcon />
+          Continue with Google
+        </button>
+
+        <div className="my-5 flex items-center gap-3">
+          <div className="h-px flex-1 bg-line" />
+          <span className="text-xs uppercase tracking-[0.08em] text-text-3">or</span>
+          <div className="h-px flex-1 bg-line" />
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <Field label="Full Name">
+            <Input
               type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
               placeholder="Muhammad Ali"
-              style={styles.input}
+              required
             />
-          </div>
+          </Field>
 
-          <div style={styles.field}>
-            <label style={styles.label}>Email</label>
-            <input
+          <Field label="Email">
+            <Input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               placeholder="you@example.com"
-              style={styles.input}
+              required
             />
-          </div>
+          </Field>
 
-          <div style={styles.field}>
-            <label style={styles.label}>Password</label>
-            <input
+          <Field label="Password">
+            <Input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
               placeholder="Min 6 characters"
-              style={styles.input}
+              required
             />
-          </div>
+          </Field>
 
-          <div style={styles.field}>
-            <label style={styles.label}>Confirm Password</label>
-            <input
+          <Field label="Confirm Password">
+            <Input
               type="password"
               name="confirmPassword"
               value={form.confirmPassword}
               onChange={handleChange}
               placeholder="••••••••"
-              style={styles.input}
+              required
             />
-          <button type="submit" style={styles.btn} disabled={loading}>
+          </Field>
+
+          <Button type="submit" size="lg" className="mt-2" disabled={loading}>
             {loading ? "Creating account..." : "Create Account"}
-          </button>
-          </div>
-          <br />
-          <button onClick={handleGoogleLogin} style={styles.googleBtn}>
-            <svg width="18" height="18" viewBox="0 0 18 18" style={{ flexShrink: 0 }}>
-              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" />
-              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
-              <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" />
-              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" />
-            </svg>
-            Continue with Google
-          </button>
+          </Button>
         </form>
 
-        <p style={styles.footer}>
-          Already have an account?{" "}
-          <Link to="/login" style={styles.link}>
-            Sign in
-          </Link>
+        <p className="mt-6 text-center text-[13px] text-text-2">
+          Already have an account? <Link to="/login" className="font-semibold text-primary">Sign In</Link>
         </p>
-
       </div>
     </div>
   );
-};
-
-const styles = {
-  page: { 
-      minHeight: "100vh", 
-      background: "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center", 
-      padding: "24px" 
-  },
-  
-  card: { 
-      background: "#000", 
-      border: "1px solid #334155", 
-      borderRadius: "16px", 
-      padding: "40px", 
-      width: "100%", 
-      maxWidth: "420px" 
-  },
-  
-  title: { 
-      color: "#f1f5f9", 
-      fontSize: "26px", 
-      fontWeight: "700", 
-      margin: "0 0 6px" 
-  },
-  
-  subtitle: { 
-      color: "#64748b", 
-      fontSize: "14px", 
-      margin: "0 0 28px" 
-  },
-  
-  error: { 
-      background: "#450a0a", 
-      border: "1px solid #7f1d1d", 
-      color: "#fca5a5", 
-      padding: "10px 14px", 
-      borderRadius: "8px", 
-      fontSize: "13px", 
-      marginBottom: "20px" 
-  },
-  
-  form: { 
-      display: "flex", 
-      flexDirection: "column", 
-      gap: "16px" 
-  },
-  
-  googleBtn: { 
-      display: "flex", 
-      alignItems: "center", 
-      justifyContent: "center", 
-      gap: "10px", 
-      width: "100%", 
-      padding: "11px", 
-      background: "#fff", 
-      border: "none", 
-      borderRadius: "8px", 
-      fontSize: "14px", 
-      fontWeight: "600", 
-      color: "#374151", 
-      cursor: "pointer", 
-      marginBottom: "16px" 
-  },
-  
-  field: { 
-      display: "flex", 
-      flexDirection: "column", 
-      gap: "6px" 
-  },
-  
-  label: { 
-      color: "#94a3b8", 
-      fontSize: "13px", 
-      fontWeight: "500" 
-  },
-  
-  input: { 
-      background: "#0f172a", 
-      border: "1px solid #334155", 
-      borderRadius: "8px", 
-      padding: "10px 14px", 
-      color: "#f1f5f9", 
-      fontSize: "14px", 
-      outline: "none" 
-  },
-  
-  btn: { 
-      background: "#38bdf8", 
-      color: "#0f172a", 
-      border: "none", 
-      borderRadius: "8px", 
-      padding: "12px", 
-      fontSize: "15px", 
-      fontWeight: "700", 
-      cursor: "pointer", 
-      marginTop: "6px" 
-  },
-  
-  footer: { 
-      color: "#64748b", 
-      fontSize: "13px", 
-      textAlign: "center", 
-      marginTop: "24px" 
-  },
-  
-  link: { 
-      color: "#38bdf8", 
-      textDecoration: "none", 
-      fontWeight: "600" 
-  },
 };
 
 export default Signup;

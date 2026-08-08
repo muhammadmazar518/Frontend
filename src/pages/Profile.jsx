@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
 import { getProfile, updateProfile } from "../api";
+import { PageHeader, Card, Input, Field, Button, ErrorBox, SuccessBox, Skeleton } from "../components/ui";
 
 const Profile = () => {
   const [form, setForm] = useState({ name: "", email: "", phone: "", website: "", profession: "" });
@@ -8,10 +8,16 @@ const Profile = () => {
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState(() => {
+    const token = localStorage.getItem("token");
+    const savedPhoto = localStorage.getItem("profile_photo");
+    const savedToken = localStorage.getItem("photo_token");
+    if (savedPhoto && savedToken === token) return savedPhoto;
+    localStorage.removeItem("profile_photo");
+    return null;
+  });
   const [editMode, setEditMode] = useState(false);
   const fileRef = useRef();
-  const navigate = useNavigate();
 
   useEffect(() => {
     getProfile()
@@ -24,24 +30,12 @@ const Profile = () => {
       }))
       .catch(() => setError("Failed to load profile."))
       .finally(() => setLoading(false));
-
-    
-    const token = localStorage.getItem("token");
-    const savedPhoto = localStorage.getItem("profile_photo");
-    const savedToken = localStorage.getItem("photo_token");
-
-    if (savedPhoto && savedToken === token) {
-      setPhoto(savedPhoto);
-    } else {
-      
-      setPhoto(null);
-      localStorage.removeItem("profile_photo");
-    }
   }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setSuccess(""); setError("");
+    setSuccess("");
+    setError("");
   };
 
   const handlePhotoChange = (e) => {
@@ -59,7 +53,10 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email) { setError("Name and email are required."); return; }
+    if (!form.name || !form.email) {
+      setError("Name and email are required.");
+      return;
+    }
     try {
       setSaving(true);
       await updateProfile(form);
@@ -67,359 +64,123 @@ const Profile = () => {
       setEditMode(false);
     } catch (err) {
       setError(err.response?.data?.message || "Update failed.");
-    } finally { setSaving(false); }
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
-    <div style={styles.page}>
-      <h1 style={styles.heading}>My Profile</h1>
-      <p style={styles.sub}>Manage your account information</p>
+    <div>
+      <PageHeader title="My Profile" sub="Manage your account information" />
 
-      <div style={styles.card}>
-        <div style={styles.topSection}>
-          <div style={styles.avatarWrap} onClick={() => fileRef.current.click()}>
+      <Card className="max-w-[760px] p-6 sm:p-8">
+        <div className="mb-6 flex flex-wrap items-center gap-5">
+          <div className="relative h-24 w-24 shrink-0 cursor-pointer" onClick={() => fileRef.current.click()}>
             {photo ? (
-              <img src={photo} alt="Profile" style={styles.avatarImg} />
+              <img src={photo} alt="Profile" className="h-24 w-24 rounded-full object-cover" />
             ) : (
-              <div style={styles.avatarFallback}>
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-primary text-[38px] font-extrabold text-black shadow-sm">
                 {form.name ? form.name.charAt(0).toUpperCase() : "U"}
               </div>
             )}
-            <div style={styles.cameraBtn}>
-              <span style={{ fontSize: "14px" }}>📷</span>
+            <div className="absolute bottom-0.5 right-0.5 flex h-7 w-7 items-center justify-center rounded-full border-2 border-canvas bg-surface-2 text-text-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
             </div>
             <input
               ref={fileRef}
               type="file"
               accept="image/*"
               onChange={handlePhotoChange}
-              style={{ display: "none" }}
+              className="hidden"
             />
           </div>
 
-          <div style={styles.userInfo}>
-            <h2 style={styles.userName}>{form.name || "User"}</h2>
-            <p style={styles.userEmail}>{form.email}</p>
+          <div className="min-w-0 flex-1">
+            <h2 className="m-0 font-display text-[22px] font-extrabold text-text">{form.name || "User"}</h2>
+            <p className="mt-1 mb-2.5 text-sm text-text-2">{form.email || ""}</p>
+            <span className="inline-block rounded-full border border-line bg-surface-3/60 px-3.5 py-1 text-[11px] font-bold text-text-2">
+              FREE PLAN
+            </span>
           </div>
+
+          {!editMode && (
+            <Button variant="outline" className="sm:ml-auto" onClick={() => setEditMode(true)}>Edit Profile</Button>
+          )}
         </div>
 
-        <div style={styles.divider} />
+        <div className="mb-6 h-px bg-line" />
 
         {loading ? (
-          <p style={styles.info}>Loading...</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div key={i} className="flex flex-col gap-2">
+                <Skeleton width={80} height={11} />
+                <Skeleton height={44} />
+              </div>
+            ))}
+          </div>
         ) : editMode ? (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            {error && <ErrorBox>{error}</ErrorBox>}
+            {success && <SuccessBox>{success}</SuccessBox>}
 
-          <form onSubmit={handleSubmit} style={styles.form}>
-            {error && <div style={styles.error}>{error}</div>}
-            {success && <div style={styles.successMsg}>{success}</div>}
-
-            <div style={styles.formGrid}>
-              <div style={styles.field}>
-                <label style={styles.fieldLabel}>FULL NAME</label>
-                <input name="name" value={form.name} onChange={handleChange} style={styles.input} />
-              </div>
-              <div style={styles.field}>
-                <label style={styles.fieldLabel}>EMAIL</label>
-                <input name="email" type="email" value={form.email} onChange={handleChange} style={styles.input} />
-              </div>
-              <div style={styles.field}>
-                <label style={styles.fieldLabel}>PHONE</label>
-                <input name="phone" value={form.phone} onChange={handleChange} style={styles.input} placeholder="—" />
-              </div>
-              <div style={styles.field}>
-                <label style={styles.fieldLabel}>WEBSITE</label>
-                <input name="website" value={form.website} onChange={handleChange} style={styles.input} placeholder="—" />
-              </div>
-              <div style={styles.field}>
-                <label style={styles.fieldLabel}>PROFESSION</label>
-                <input name="profession" value={form.profession} onChange={handleChange} style={styles.input} placeholder="—" />
-              </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Full Name">
+                <Input name="name" value={form.name} onChange={handleChange} required />
+              </Field>
+              <Field label="Email">
+                <Input name="email" type="email" value={form.email} onChange={handleChange} required />
+              </Field>
+              <Field label="Phone">
+                <Input name="phone" value={form.phone} onChange={handleChange} placeholder="—" />
+              </Field>
+              <Field label="Website">
+                <Input name="website" value={form.website} onChange={handleChange} placeholder="—" />
+              </Field>
+              <Field label="Profession">
+                <Input name="profession" value={form.profession} onChange={handleChange} placeholder="—" />
+              </Field>
             </div>
 
-            <div style={styles.btnRow}>
-              <button type="submit" style={styles.saveBtn} disabled={saving}>
-                {saving ? "Saving..." : "✓ Save Changes"}
-              </button>
-              <button type="button" onClick={() => setEditMode(false)} style={styles.cancelBtn}>
+            <div className="flex gap-2.5">
+              <Button type="submit" disabled={saving}>
+                {saving ? "Saving..." : "Save Changes"}
+              </Button>
+              <Button variant="ghost" type="button" onClick={() => setEditMode(false)}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </form>
         ) : (
-          <>
-            <div style={styles.infoGrid}>
-              <div style={styles.infoItem}>
-                <p style={styles.infoLabel}>FULL NAME</p>
-                <p style={styles.infoValue}>{form.name || "—"}</p>
-              </div>
-              <div style={styles.infoItem}>
-                <p style={styles.infoLabel}>EMAIL</p>
-                <p style={styles.infoValue}>{form.email || "—"}</p>
-              </div>
-              <div style={styles.infoItem}>
-                <p style={styles.infoLabel}>PHONE</p>
-                <p style={styles.infoValue}>{form.phone || "—"}</p>
-              </div>
-              <div style={styles.infoItem}>
-                <p style={styles.infoLabel}>WEBSITE</p>
-                <p style={styles.infoValue}>{form.website || "—"}</p>
-              </div>
-              <div style={styles.infoItem}>
-                <p style={styles.infoLabel}>PROFESSION</p>
-                <p style={styles.infoValue}>{form.profession || "—"}</p>
-              </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div>
+              <p className="m-0 mb-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-text-3">Full Name</p>
+              <p className="m-0 text-[15px] font-medium text-text">{form.name || "—"}</p>
             </div>
-
-            <button onClick={() => setEditMode(true)} style={styles.editBtn}>
-              ✏️ Edit Profile
-            </button>
-          </>
+            <div>
+              <p className="m-0 mb-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-text-3">Email</p>
+              <p className="m-0 text-[15px] font-medium text-text">{form.email || "—"}</p>
+            </div>
+            <div>
+              <p className="m-0 mb-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-text-3">Phone</p>
+              <p className="m-0 text-[15px] font-medium text-text">{form.phone || "—"}</p>
+            </div>
+            <div>
+              <p className="m-0 mb-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-text-3">Website</p>
+              <p className="m-0 text-[15px] font-medium text-text">{form.website || "—"}</p>
+            </div>
+            <div>
+              <p className="m-0 mb-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-text-3">Profession</p>
+              <p className="m-0 text-[15px] font-medium text-text">{form.profession || "—"}</p>
+            </div>
+          </div>
         )}
-      </div>
+      </Card>
     </div>
   );
-};
-
-const styles = {
-
-   page: {
-    padding: "40px",
-    background: "#1B1464",
-    minHeight: "100vh",
-  },
-  heading: {
-    color: "#fff",
-    fontSize: "28px",
-    fontWeight: "800",
-    margin: "0 0 4px",
-    letterSpacing: "-0.5px"
-  },
-
-  sub: {
-    color: "#000",
-    fontSize: "14px",
-    marginBottom: "24px"
-  },
-
-  card: {
-    background: "#161824",
-    border: "1px solid #1e2130",
-    borderRadius: "16px",
-    padding: "28px",
-    maxWidth: "700px"
-  },
-
-  topSection: {
-    display: "flex",
-    alignItems: "center",
-    gap: "20px",
-    marginBottom: "24px"
-  },
-
-  avatarWrap: {
-    position: "relative",
-    width: "90px",
-    height: "90px",
-    borderRadius: "50%",
-    cursor: "pointer",
-    flexShrink: 0
-  },
-
-  avatarImg: {
-    width: "90px",
-    height: "90px",
-    borderRadius: "50%",
-    objectFit: "cover"
-  },
-
-  avatarFallback: {
-    width: "90px",
-    height: "90px",
-    borderRadius: "50%",
-    background: "#7c3aed",
-    color: "#fff",
-    fontSize: "36px",
-    fontWeight: "800",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-
-  cameraBtn: {
-    position: "absolute",
-    bottom: "2px",
-    right: "2px",
-    width: "26px",
-    height: "26px",
-    borderRadius: "50%",
-    background: "#1e2130",
-    border: "2px solid #0d0f14",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer"
-  },
-
-  userInfo: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "4px"
-  },
-
-  userName: {
-    color: "#fff",
-    fontSize: "22px",
-    fontWeight: "800",
-    margin: 0
-  },
-
-  userEmail: {
-    color: "#6b7280",
-    fontSize: "14px",
-    margin: "0 0 8px"
-  },
-
-  freeBadge: {
-    display: "inline-block",
-    background: "#1e2130",
-    color: "#9ca3af",
-    fontSize: "11px",
-    fontWeight: "700",
-    padding: "4px 12px",
-    borderRadius: "20px",
-    border: "1px solid #374151",
-    width: "fit-content"
-  },
-
-  divider: {
-    height: "1px",
-    background: "#1e2130",
-    marginBottom: "24px"
-  },
-
-  infoGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
-    gap: "20px 32px",
-    marginBottom: "28px"
-  },
-
-  infoItem: {},
-
-  infoLabel: {
-    color: "#4b5563",
-    fontSize: "11px",
-    fontWeight: "700",
-    letterSpacing: "1px",
-    margin: "0 0 6px"
-  },
-
-  infoValue: {
-    color: "#d1d5db",
-    fontSize: "15px",
-    fontWeight: "500",
-    margin: 0
-  },
-
-  editBtn: {
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    padding: "10px 20px",
-    background: "transparent",
-    border: "1px solid #374151",
-    borderRadius: "10px",
-    color: "#d1d5db",
-    fontSize: "14px",
-    fontWeight: "600",
-    cursor: "pointer"
-  },
-
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "16px"
-  },
-
-  formGrid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "16px"
-  },
-
-  field: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px"
-  },
-
-  fieldLabel: {
-    color: "#4b5563",
-    fontSize: "11px",
-    fontWeight: "700",
-    letterSpacing: "1px"
-  },
-
-  input: {
-    background: "#0d0f14",
-    border: "1px solid #1e2130",
-    borderRadius: "8px",
-    padding: "10px 14px",
-    color: "#fff",
-    fontSize: "14px",
-    outline: "none"
-  },
-
-  btnRow: {
-    display: "flex",
-    gap: "10px"
-  },
-
-  saveBtn: {
-    padding: "10px 24px",
-    background: "#7c3aed",
-    border: "none",
-    borderRadius: "8px",
-    color: "#fff",
-    fontSize: "14px",
-    fontWeight: "700",
-    cursor: "pointer"
-  },
-
-  cancelBtn: {
-    padding: "10px 20px",
-    background: "transparent",
-    border: "1px solid #374151",
-    borderRadius: "8px",
-    color: "#9ca3af",
-    fontSize: "14px",
-    fontWeight: "600",
-    cursor: "pointer"
-  },
-
-  error: {
-    background: "#1f0a0a",
-    border: "1px solid #7f1d1d",
-    color: "#fca5a5",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontSize: "13px"
-  },
-
-  successMsg: {
-    background: "#052e16",
-    border: "1px solid #166534",
-    color: "#86efac",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontSize: "13px"
-  },
-
-  info: {
-    color: "#6b7280",
-    fontSize: "14px"
-  },
-
 };
 
 export default Profile;
