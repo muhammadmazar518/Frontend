@@ -177,7 +177,7 @@ export default function Courses() {
 
             <Button
               size="lg"
-              onClick={() => navigate(`/purchase-success?course=${encodeURIComponent(activeCourse.title)}`)}
+              onClick={() => navigate("/pricing")}
             >
               Buy Course — Unlock Pro Features
             </Button>
