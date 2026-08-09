@@ -10,35 +10,31 @@ import {
 } from "../components/ui";
 
 const StatCard = ({ label, value, icon, badge, loading }) => (
-  <Card className="relative overflow-hidden p-5">
-    <div className="flex items-start justify-between gap-4">
-      <div>
-        <div className="mb-2 flex items-center gap-2">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-text-3">
-            {badge}
-          </span>
-        </div>
+  <div className="flex items-center justify-between rounded-md border border-line bg-surface p-5">
+    <div>
+      <span className="text-[11px] font-bold uppercase tracking-wide text-text-3">
+        {badge}
+      </span>
 
-        <p className="m-0 text-[13px] font-semibold text-text-2">
-          {label}
-        </p>
+      <p className="m-0 mt-1 text-[13px] font-semibold text-text-2">
+        {label}
+      </p>
 
-        <div className="mt-2">
-          {loading ? (
-            <Skeleton className="h-7 w-20" />
-          ) : (
-            <p className="m-0 font-display text-2xl font-extrabold text-text">
-              {value}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-line bg-surface-2 text-xl">
-        {icon}
+      <div className="mt-2">
+        {loading ? (
+          <Skeleton className="h-7 w-20" />
+        ) : (
+          <p className="m-0 font-display text-2xl font-extrabold text-text">
+            {value}
+          </p>
+        )}
       </div>
     </div>
-  </Card>
+
+    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-line bg-surface-2 text-xl">
+      {icon}
+    </div>
+  </div>
 );
 
 const STEPS = [
@@ -99,11 +95,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     getDashboardStats()
-      .then((res) => setStats(res.data))
+      .then((res) => {
+        setStats(res.data);
+      })
       .catch(() => {});
 
     getProfile()
-      .then((res) => setProfile(res.data))
+      .then((res) => {
+        setProfile(res.data);
+      })
       .catch(() => {});
   }, []);
 
@@ -125,14 +125,7 @@ const Dashboard = () => {
 
   const memberSince = formatMemberSince(profile?.created_at);
 
-  const accessibleCourses =
-    stats?.accessibleCourses ??
-    stats?.totalCourses ??
-    stats?.courses ??
-    null;
-
-  const courseCount =
-    accessibleCourses !== null ? Number(accessibleCourses) : 0;
+  const totalCourses = Number(stats?.totalCourses ?? 0);
 
   const hour = new Date().getHours();
 
@@ -140,8 +133,8 @@ const Dashboard = () => {
     hour < 12
       ? "Good morning"
       : hour < 18
-      ? "Good afternoon"
-      : "Good evening";
+        ? "Good afternoon"
+        : "Good evening";
 
   const quickActions = [
     {
@@ -206,7 +199,7 @@ const Dashboard = () => {
 
         <StatCard
           label="Courses"
-          value={courseCount}
+          value={totalCourses}
           icon="📚"
           badge="Courses"
           loading={!stats}
