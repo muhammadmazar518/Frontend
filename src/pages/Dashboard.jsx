@@ -12,9 +12,11 @@ import {
 const StatCard = ({ label, value, icon, badge, loading }) => (
   <div className="flex items-center justify-between rounded-md border border-line bg-surface p-5">
     <div>
-      <span className="text-[11px] font-bold uppercase tracking-wide text-text-3">
-        {badge}
-      </span>
+      <div className="flex items-center gap-2">
+        <span className="text-[11px] font-bold uppercase tracking-wide text-text-3">
+          {badge}
+        </span>
+      </div>
 
       <p className="m-0 mt-1 text-[13px] font-semibold text-text-2">
         {label}
@@ -94,17 +96,21 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getDashboardStats()
-      .then((res) => {
-        setStats(res.data);
-      })
-      .catch(() => {});
+    const loadDashboard = async () => {
+      try {
+        const [statsRes, profileRes] = await Promise.all([
+          getDashboardStats(),
+          getProfile(),
+        ]);
 
-    getProfile()
-      .then((res) => {
-        setProfile(res.data);
-      })
-      .catch(() => {});
+        setStats(statsRes.data);
+        setProfile(profileRes.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadDashboard();
   }, []);
 
   const toggleStep = (key) => {
@@ -133,8 +139,8 @@ const Dashboard = () => {
     hour < 12
       ? "Good morning"
       : hour < 18
-        ? "Good afternoon"
-        : "Good evening";
+      ? "Good afternoon"
+      : "Good evening";
 
   const quickActions = [
     {
@@ -155,7 +161,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div>
+    <>
       <PageHeader
         title={`${greeting}, ${firstName}`}
         sub={
@@ -305,7 +311,7 @@ const Dashboard = () => {
           </div>
         </Card>
       </div>
-    </div>
+    </>
   );
 };
 
