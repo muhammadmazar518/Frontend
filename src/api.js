@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
- baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -32,15 +34,25 @@ api.interceptors.response.use(
   }
 );
 
+export const sendContactMessage = (data) =>
+  api.post("/contact", data);
 
-export const sendContactMessage = (data) => api.post("/contact", data);
-export const loginUser = (data) => api.post("/auth/login", data);
-export const signupUser = (data) => api.post("/auth/signup", data);
-export const logoutUser = () => api.post("/auth/logout");
+export const loginUser = (data) =>
+  api.post("/auth/login", data);
 
-export const getProfile = () => api.get("/user/profile");
-export const updateProfile = (data) => api.put("/user/profile", data);
+export const signupUser = (data) =>
+  api.post("/auth/signup", data);
 
-export const getDashboardStats = () => api.get("/dashboard/stats");
+export const logoutUser = () =>
+  api.post("/auth/logout");
+
+export const getProfile = () =>
+  api.get("/user/profile");
+
+export const updateProfile = (data) =>
+  api.put("/user/profile", data);
+
+export const getDashboardStats = () =>
+  api.get("/dashboard/stats");
 
 export default api;

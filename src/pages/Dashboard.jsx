@@ -96,21 +96,23 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadDashboard = async () => {
-      try {
-        const [statsRes, profileRes] = await Promise.all([
-          getDashboardStats(),
-          getProfile(),
-        ]);
+    getDashboardStats()
+      .then((res) => {
+        console.log("DASHBOARD STATS:", res.data);
+        setStats(res.data);
+      })
+      .catch((error) => {
+        console.error("DASHBOARD STATS ERROR:", error);
+      });
 
-        setStats(statsRes.data);
-        setProfile(profileRes.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    loadDashboard();
+    getProfile()
+      .then((res) => {
+        console.log("PROFILE:", res.data);
+        setProfile(res.data);
+      })
+      .catch((error) => {
+        console.error("PROFILE ERROR:", error);
+      });
   }, []);
 
   const toggleStep = (key) => {
@@ -139,8 +141,8 @@ const Dashboard = () => {
     hour < 12
       ? "Good morning"
       : hour < 18
-      ? "Good afternoon"
-      : "Good evening";
+        ? "Good afternoon"
+        : "Good evening";
 
   const quickActions = [
     {
@@ -246,29 +248,26 @@ const Dashboard = () => {
               return (
                 <div
                   key={s.key}
-                  className={`flex cursor-pointer items-center gap-3.5 rounded-md border p-3 transition-colors duration-200 ${
-                    isDone
+                  className={`flex cursor-pointer items-center gap-3.5 rounded-md border p-3 transition-colors duration-200 ${isDone
                       ? "border-success/25 bg-success/5"
                       : "border-line bg-surface-2/60"
-                  }`}
+                    }`}
                   onClick={() => toggleStep(s.key)}
                 >
                   <span
-                    className={`flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${
-                      isDone
+                    className={`flex h-[26px] w-[26px] flex-shrink-0 items-center justify-center rounded-full text-xs font-extrabold ${isDone
                         ? "border border-success bg-success/15 text-success"
                         : "border border-line-strong bg-surface-3 text-text-3"
-                    }`}
+                      }`}
                   >
                     {isDone ? "✓" : s.icon}
                   </span>
 
                   <span
-                    className={`flex-1 text-[13.5px] font-semibold ${
-                      isDone
+                    className={`flex-1 text-[13.5px] font-semibold ${isDone
                         ? "text-text-2 line-through"
                         : "text-text"
-                    }`}
+                      }`}
                   >
                     {s.label}
                   </span>
