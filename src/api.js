@@ -53,6 +53,6 @@ export const updateProfile = (data) =>
   api.put("/user/profile", data);
 
 export const getDashboardStats = () =>
-  api.get("/dashboard/stats");
+  api.get(`/dashboard/stats?_t=${Date.now()}`);
 
 export default api;
